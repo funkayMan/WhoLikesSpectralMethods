@@ -5,12 +5,12 @@
 
 class LegendreQuad{
 private:
-	int nSize;
+  int nSize;
 public:
-	//~ int LegendreQuad(int);
-	int setElementSize(int value);
+  //~ int LegendreQuad(int);
+  int setElementSize(int value);
   int getElementSize();
-	void MakeTmatrix();
+  void MakeTmatrix();
   double getCollocation(int n);
   double getWeight(int n);
   void setCollocation(double val,int n);

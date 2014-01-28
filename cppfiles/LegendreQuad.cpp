@@ -31,15 +31,19 @@ By: Tyler Arsenault
 	//~ setElementSize(0);
 //~ }
 
-int LegendreQuad::setElementSize(int value){
-	nSize=value;
-	return nSize;}
-
-int LegendreQuad::getElementSize(){
-	return nSize;
+int LegendreQuad::setElementSize(int value)
+{
+  nSize=value;
+  return nSize;
 }
 
-void LegendreQuad::MakeTmatrix(){
+int LegendreQuad::getElementSize()
+{
+  return nSize;
+}
+
+void LegendreQuad::MakeTmatrix()
+{
 	float fBeta = 1/sqrt(3);
 	
 	int nSize1=nSize+1;
@@ -48,12 +52,12 @@ void LegendreQuad::MakeTmatrix(){
 	
 	// initialize the t matrix
 	for(int i = 0; i<nSize1;i++)
-	{
+	  {
 		for(int j=0;j<nSize1;j++)
-		{
+		  {
 			tMat[i][j]=0.0;
-		}
-	}	
+		  }
+	  }	
 	// Define the t matrix
 	tMat[0][1]=fBeta; tMat[1][0]=fBeta;
 	
@@ -61,22 +65,22 @@ void LegendreQuad::MakeTmatrix(){
 	
         int i;
 	for(i=1;i<nSize;i++)
-	{
-                ii = 1.0+(double)i;
+	  {
+		ii = 1.0+(double)i;
 		tMat[i+1][i] = sqrt((2.0*ii-1.0)/(2.0*ii+1.0))*ii/(2.0*ii-1.0);
 		tMat[i][i+1] = tMat[i+1][i];
-	}
+	  }
 	
 	tMat[nSize][nSize-1] = sqrt(ii/(2.0*ii-1.0));
 	tMat[nSize-1][nSize] = tMat[nSize][nSize-1];
 
 	// find the eigen values.....
 
-        for(i=0;i<=nSize;++i)
-          {
-            setCollocation((double)i,i);
-            setWeight(0.5*(double)i,i);
-          }
+	for(i=0;i<=nSize;++i)
+	  {
+		setCollocation((double)i,i);
+		setWeight(0.5*(double)i,i);
+	  }
 
 }
 
