@@ -22,7 +22,6 @@ Use ./classquad to execute.
 By: Tyler Arsenault
 */
 
-#include <iostream>
 #include <math.h>
 #include "LegendreQuad.h"
 //~ #include "util.h"
@@ -36,7 +35,11 @@ int LegendreQuad::setElementSize(int value){
 	nSize=value;
 	return nSize;}
 
-double* LegendreQuad::MakeTmatrix(){
+int LegendreQuad::getElementSize(){
+	return nSize;
+}
+
+void LegendreQuad::MakeTmatrix(){
 	float fBeta = 1/sqrt(3);
 	
 	int nSize1=nSize+1;
@@ -54,18 +57,48 @@ double* LegendreQuad::MakeTmatrix(){
 	// Define the t matrix
 	tMat[0][1]=fBeta; tMat[1][0]=fBeta;
 	
-	double ii=1; // this i is used for the calculation (not indexing)
+	double ii=1.0; // this i is used for the calculation (not indexing)
 	
-	for(int i=1;i<nSize;i++)
+        int i;
+	for(i=1;i<nSize;i++)
 	{
-		ii++;
-		tMat[i+1][i] = sqrt((2*ii-1)/(2*ii+1))*ii/(2*ii-1);
+                ii = 1.0+(double)i;
+		tMat[i+1][i] = sqrt((2.0*ii-1.0)/(2.0*ii+1.0))*ii/(2.0*ii-1.0);
 		tMat[i][i+1] = tMat[i+1][i];
 	}
 	
-	tMat[nSize][nSize-1] = sqrt(ii/(2*ii-1));
+	tMat[nSize][nSize-1] = sqrt(ii/(2.0*ii-1.0));
 	tMat[nSize-1][nSize] = tMat[nSize][nSize-1];
-	//~ return tMat;
+
+	// find the eigen values.....
+
+        for(i=0;i<=nSize;++i)
+          {
+            setCollocation((double)i,i);
+            setWeight(0.5*(double)i,i);
+          }
+
+}
+
+double LegendreQuad::getCollocation(int n)
+{
+  return(x[n]);
+}
+
+double LegendreQuad::getWeight(int n)
+{
+  return(w[n]);
+}
+
+
+void LegendreQuad::setCollocation(double val,int n)
+{
+  x[n] = val;
+}
+
+void LegendreQuad::setWeight(double val,int n)
+{
+  w[n] = val;
 }
 
 
