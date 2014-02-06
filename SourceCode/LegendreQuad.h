@@ -9,6 +9,7 @@ class LegendreQuad{
 		int nSize;
 		double x[MATSIZE];
 		double w[MATSIZE];
+		
 	public:
 		int setElementSize(int value);
 		int getElementSize();

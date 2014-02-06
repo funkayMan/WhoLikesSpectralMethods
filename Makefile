@@ -3,7 +3,7 @@ CFLAGS=
 CC=g++
 LINK=-lm
 UTILITY=
-FP = src/
+FP = SourceCode/
 
 
 .cpp.o:	
