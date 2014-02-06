@@ -1,16 +1,20 @@
-CC = g++ 
 
-CFLAGS = -c
+CFLAGS=
+CC=g++
+LINK=-lm
+UTILITY=
+FP = src/
 
-all: dumdum
-dumdum: woopwoop.o LegendreQuad.o
-	$(CC) woopwoop.o LegendreQuad.o -o dumdum
 
-woopwoop.o: woopwoop.cpp
-	$(CC) $(CFLAGS) woopwoop.cpp
+.cpp.o:	
+	@echo 'Compiling $<'
+	$(CC) $(CFLAGS) -c $<
 
-LegendreQuad.o: LegendreQuad.cpp
-	$(CC) $(CFLAGS) LegendreQuad.cpp
+woopwoop: $(FP)LegendreQuad.cpp LegendreQuad.o woopwoop.o
+	$(CC) $(CFLAGS) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY)
 
-clean:
-	rm -rf *o dumdum
+woopwoop.o:	woopwoop.cpp
+	$(CC) $(CFLAGS) -c $(FP)woopwoop.cpp
+
+clean:	
+	rm -f woopwoop *.o *~
