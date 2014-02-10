@@ -1,2 +1,0 @@
-g++ woopwoop.cpp LegendreQuad.cpp -o dumdum
-
