@@ -1,7 +1,8 @@
 #ifndef LEGQUAD
 #define LEGQUAD
 
-#define MATSIZE 20
+// The biggest matrix we can handle is 10000. If you want more make it bigger.
+#define MATSIZE 10001
 
 class LegendreQuad{
 
