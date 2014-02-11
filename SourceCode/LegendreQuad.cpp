@@ -118,8 +118,8 @@ void LegendreQuad::PointsAndWeights()
 	for(i=0;i<nSize1;i++)
 	{
 		setCollocation(-1.0*D[i],i);
-		setWeight(2*Z[0][i]*Z[0][i],i);
-		//~ std::cout << -1.0*D[i] << "\t " << 2*Z[0][i]*Z[0][i] << std::endl;
+		setWeight(2*pow(Z[i][0],2),i);
+		//~ std::cout << getCollocation(i) << "\t " << getWeight(i) << std::endl;
 	}
 	
 }
