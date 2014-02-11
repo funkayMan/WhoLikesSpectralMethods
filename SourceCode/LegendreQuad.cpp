@@ -130,7 +130,7 @@ void LegendreQuad::LegPolynomials()
 {
 	const int nSize1=nSize+1;
 	int i,j;
-	double ii=2.0;
+	double ii;
 	// Initialize the Legendre Polynomial Matrix
 	for(j=0;j<nSize1;j++)
 	{
@@ -159,6 +159,34 @@ void LegendreQuad::LegPolynomials()
 			
 	
 }
+
+
+void LegendreQuad::DerivativeMatrix()
+{
+	const int nSize1=nSize+1;
+	double dummyVar, ii;
+	int i,j;
+	//initialize the first two rows of the derivatives.
+	for(j=0;j<nSize1;j++)
+	{
+		setLegDeriv(0.0,0,j);
+		setLegDeriv(1.0,1,j);
+	}
+	// define the legendre polynomlial matrix
+	for(i=2; i<nSize1; i++)
+	{
+		for(j=0; j<nSize1; j++)
+		{
+			ii=(double)i;
+			dummyVar=-1.0*(2.0*ii-1)*getLegPolys(i-1,j)+getLegDeriv(i-2,j);
+			setLegDeriv(dummyVar,i,j);
+		}
+	}
+	
+}
+
+
+
 
 double LegendreQuad::getCollocation(int n)
 {
@@ -190,12 +218,25 @@ double LegendreQuad::getLegPolys(int n,int nn)
 // setLegPolys(value, row index, column index)
 void LegendreQuad::setLegPolys(double val, int n,int nn)
 {
+	
 	LegPoly[n][nn]=val;
 }
+
+double LegendreQuad::getLegDeriv(int n,int nn)
+{
+	return(LegDeriv[n][nn]);
+}
+void LegendreQuad::setLegDeriv(double val, int n,int nn)
+{
+	LegDeriv[n][nn]=val;
+}
+
 double LegendreQuad::getGamma(int n)
 {
   return(G[n]);
 }
+
+
 
 void LegendreQuad::setGamma(double val,int n)
 {

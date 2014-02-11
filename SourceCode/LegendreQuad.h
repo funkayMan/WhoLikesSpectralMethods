@@ -2,7 +2,7 @@
 #define LEGQUAD
 
 // The biggest matrix we can handle is 10000. If you want more make it bigger.
-#define MATSIZE 1001
+#define MATSIZE 500
 
 
 // For future reference, Legendre-Gauss-Lobatto=LGL
@@ -15,6 +15,7 @@ double x[MATSIZE];	// Collocation pts
 double w[MATSIZE];	// Weights
 double G[MATSIZE];	// The normalizing parameters
 double LegPoly[MATSIZE][MATSIZE];	//Leg polynomial matrix
+double LegDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
 
 
 
@@ -32,6 +33,9 @@ void PointsAndWeights();
 // for LGL quad
 void LegPolynomials();
 
+// This function calculated the derivative matrix
+void DerivativeMatrix();
+
 double getCollocation(int n);
 void setCollocation(double val,int n);
 
@@ -40,6 +44,9 @@ void setWeight(double val,int n);
 
 double getLegPolys(int n,int nn);
 void setLegPolys(double val, int n,int nn);
+
+double getLegDeriv(int n,int nn);
+void setLegDeriv(double val, int n,int nn);
 
 double getGamma(int n);
 void setGamma(double val, int n);

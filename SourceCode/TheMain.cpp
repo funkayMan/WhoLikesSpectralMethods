@@ -9,11 +9,12 @@
 
 int main(int argc,char **argv)
 {
-	int N=5;
+	int N=6;
 	LegendreQuad dummy;
 	dummy.setElementSize(N);
-	dummy.PointsAndWeights();  // run func. to get colloc. points and weights
-	dummy.LegPolynomials();		
+	dummy.PointsAndWeights();	// run func. to get colloc. points and weights
+	dummy.LegPolynomials();		// Compute Legendre Polys
+	dummy.DerivativeMatrix();	// Compute Legedre Poly Derivatives
 //********************************************************************
 //   uncomment if you want to print collocation points and weights	**
 //																	**
@@ -32,6 +33,13 @@ int main(int argc,char **argv)
 		std::cout << dummy.getWeight(i) << std::endl;
 	}
 	std::cout << "\n\n";
+		
+	std::cout << "The normalizing parameters: "<< std::endl;
+	for(j=0;j<N+1;j++)
+	{
+		std::cout<< dummy.getGamma(j) << std::endl;
+	}
+	std::cout << "\n\n";
 	
 	std::cout << "The Legendre Polynomial Matrix: " << std::endl;
 	for(j=0;j<N+1;j++)
@@ -44,9 +52,16 @@ int main(int argc,char **argv)
 	}
 	
 	std::cout << "\n\n";
-	std::cout << "The normalizing parameters: "<< std::endl;
+	
+	std::cout << "The Legendre Polynomial Derivative Matrix: " << std::endl;
 	for(j=0;j<N+1;j++)
 	{
-		std::cout<< dummy.getGamma(j) << std::endl;
+		for(i=0;i<N+1;i++)
+		{
+			std::cout << dummy.getLegDeriv(j,i) << "  ";
+		}
+		std::cout<<std::endl;
 	}
+	
+
 }
