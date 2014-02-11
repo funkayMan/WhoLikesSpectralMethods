@@ -25,7 +25,7 @@ int LegendreQuad::getElementSize()
   return nSize;
 }
 
-void LegendreQuad::Eigs()
+void LegendreQuad::PointsAndWeights()
 {
 	double fBeta = 1/sqrt(3);
 
@@ -124,15 +124,45 @@ void LegendreQuad::Eigs()
 	
 }
 
+// LegPolynomials defines the legendre polynomial matrix and 
+// normalizing 
+void LegendreQuad::LegPolynomials()
+{
+	const int nSize1=nSize+1;
+	int i,j;
+	double ii=2.0;
+	// Initialize the Legendre Polynomial Matrix
+	for(j=0;j<nSize1;j++)
+	{
+		setLegPolys(1.0, 0, j);
+		setLegPolys(getCollocation(j), 1, j);
+	}
+	// Define the Legendre Polys
+	double tempNum;
+	for(i=2;i<nSize1;i++)
+	{
+		ii=(double)i;
+		for(j=0;j<nSize1;j++)
+		{
+			tempNum=((2.0*ii-1.0)/ii)*getCollocation(j)*getLegPolys(i-1,j)-((ii-1.0)/ii)*getLegPolys(i-2,j);
+			setLegPolys(tempNum,i,j);
+		}
+	}
+	
+	// Define the normalizing parameters Gamma
+	for(i=0;i<nSize1;i++)
+	{
+		ii=(double)i;
+		tempNum=1.0/(ii+0.5);
+		setGamma(tempNum,i);
+	}
+			
+	
+}
 
 double LegendreQuad::getCollocation(int n)
 {
   return(x[n]);
-}
-
-double LegendreQuad::getWeight(int n)
-{
-  return(w[n]);
 }
 
 
@@ -141,8 +171,45 @@ void LegendreQuad::setCollocation(double val,int n)
   x[n] = val;
 }
 
+
+double LegendreQuad::getWeight(int n)
+{
+  return(w[n]);
+}
+
 void LegendreQuad::setWeight(double val,int n)
 {
   w[n] = val;
 }
+
+double LegendreQuad::getLegPolys(int n,int nn)
+{
+	return(LegPoly[n][nn]);
+}
+
+// setLegPolys(value, row index, column index)
+void LegendreQuad::setLegPolys(double val, int n,int nn)
+{
+	LegPoly[n][nn]=val;
+}
+double LegendreQuad::getGamma(int n)
+{
+  return(G[n]);
+}
+
+void LegendreQuad::setGamma(double val,int n)
+{
+  G[n] = val;
+}
+
+
+
+
+
+
+
+
+
+
+
 

@@ -9,15 +9,27 @@
 
 int main(int argc,char **argv)
 {
-	int N=10;
+	int N=5;
 	LegendreQuad dummy;
-	int i;
 	dummy.setElementSize(N);
-	dummy.Eigs();
+	dummy.PointsAndWeights();
+	dummy.LegPolynomials();
 	// uncomment if you want to print collocation points and weights
-	
-	for(i=0;i<=N;++i)
+	int i,j;
+	std::cout << "The Legendre Polynomial Matrix: " << std::endl;
+	for(j=0;j<N+1;j++)
 	{
-		std::cout << dummy.getCollocation(i) <<"\t"<<dummy.getWeight(i)<< std::endl;
+		for(i=0;i<N+1;i++)
+		{
+			std::cout << dummy.getLegPolys(j,i) << "  ";
+		}
+		std::cout<<std::endl;
+	}
+	
+	std::cout << "\n\n";
+	std::cout << "The normalizing parameters: "<< std::endl;
+	for(j=0;j<N+1;j++)
+	{
+		std::cout<< dummy.getGamma(j) << std::endl;
 	}
 }
