@@ -15,6 +15,7 @@ int main(int argc,char **argv)
 	dummy.PointsAndWeights();	// run func. to get colloc. points and weights
 	dummy.LegPolynomials();		// Compute Legendre Polys
 	dummy.DerivativeMatrix();	// Compute Legedre Poly Derivatives
+	dummy.SecondDerivativeMatrix();
 //********************************************************************
 //   uncomment if you want to print collocation points and weights	**
 //																	**
@@ -59,6 +60,18 @@ int main(int argc,char **argv)
 		for(i=0;i<N+1;i++)
 		{
 			std::cout << dummy.getLegDeriv(j,i) << "  ";
+		}
+		std::cout<<std::endl;
+	}
+	
+		std::cout << "\n\n";
+	
+	std::cout << "The Legendre Polynomial D_2 Matrix: " << std::endl;
+	for(j=0;j<N+1;j++)
+	{
+		for(i=0;i<N+1;i++)
+		{
+			std::cout << dummy.getLegSecondDeriv(j,i) << "  ";
 		}
 		std::cout<<std::endl;
 	}

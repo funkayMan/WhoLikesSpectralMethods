@@ -6,20 +6,20 @@ UTILITY=
 FP = SourceCode/
 # This is the directory to link to for LAPACK.
 # It is likely that this directory will need to be changed.
-LPKLIB = -L/usr/lib
+LIB = -L/usr/lib
 # This is the linking command for LAPACK's fortran library, this will
 # probably also need to be changed.
 LPKLINK = -llapack
-
+BLASLINK = -lblas
 .cpp.o:	
 	@echo 'Compiling $<'
 	$(CC) $(CFLAGS) -c $<
 
 TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o TheMain.o
-	$(CC) $(CFLAGS) $(LPKLINK) $(LPKLIB) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY)
+	$(CC) $(CFLAGS) $(LPKLINK) $(BLASLINK) $(LPKLIB) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY)
 
 LegendreQuad.o: 
-	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LPKLIB) $(LPKLINK) -o LegendreQuad.o
+	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LPKLIB) $(LPKLINK) $(BLASLINK) -o LegendreQuad.o
 
 TheMain.o:
 	$(CC) $(CFLAGS) -c $(FP)TheMain.cpp $(LPKLIB) $(LPKLINK) -o TheMain.o

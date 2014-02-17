@@ -14,11 +14,20 @@ By: Tyler Arsenault
 #include "LegendreQuad.h"
 #include <iostream>
 
-extern "C" void dstev_(char *jobz, int *n, double *D, double *E, double *Z, int *LDZ, double *WORK, int *INFO);
+// LAPACK tridiagonal eigen decomp. type 'man dstev' for details
+extern "C" void dstev_(char *jobz, int *n, double *D, double *E, 
+double *Z, int *LDZ, double *WORK, int *INFO);
 
-int LegendreQuad::setElementSize(int value){
-nSize=value;
-return nSize;}
+
+// BLAS matrix product type 'man dgemm' for details, using BLAS for speed/parallelization
+extern "C" void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N,
+ int *K, double *ALPHA, double *A, int *LDA, double *B, int *LDB, 
+ double *BETA, double *C, int *LDC);
+
+int LegendreQuad::setElementSize(int value)
+{
+	nSize=value;
+}
 
 int LegendreQuad::getElementSize()
 {
@@ -87,7 +96,7 @@ void LegendreQuad::PointsAndWeights()
 
 // D will be the eigenvalues, Z the eigenvectors
 // Call DSTEV LAPACK function
-// for more info, call "man dstev" in unix shell
+// for more info, call "man dstev" in shell
 	dstev_(&c,&N,D,E,&Z[0][0],&LDZ,WORK,&info);
 	//~ std::cout << "INFO = " << info << std::endl;
 //***************************************************
@@ -185,8 +194,44 @@ void LegendreQuad::DerivativeMatrix()
 	
 }
 
+void LegendreQuad::SecondDerivativeMatrix()
+{
+	char tA = 'T';
+	char tB= 'T';
+	int nSize1=nSize+1;
+	int M=nSize1;
+	int N=nSize1;
+	int K=nSize1;
+	int LDA=nSize1;
+	int LDB=nSize1;
+	int LDC=nSize1;
+	
+	double ALPHA = 1.0;
+	double BETA = 0.0;
+	
+	double A[nSize1][nSize1];
+	double C[nSize1][nSize1];
+	
+	int i,j;
+	for(j=0;j<nSize1;j++)
+	{
+		for(i=0;i<nSize1;i++)
+		{
+			A[i][j]=getLegDeriv(i,j);
 
-
+		}
+	}
+	// call the BLAS function dgemm
+	dgemm_(&tA,&tB,&M,&N,&K,&ALPHA,&A[0][0],&LDA,&A[0][0],&LDB,&BETA,&C[0][0],&LDC);
+	// Will need to transpose C. the output
+	for(i=0;i<nSize1;i++)
+	{
+		for(j=0;j<nSize1;j++)
+		{
+			setLegSecondDeriv(C[i][j],j,i);
+		}
+	}	
+}
 
 double LegendreQuad::getCollocation(int n)
 {
@@ -229,6 +274,15 @@ double LegendreQuad::getLegDeriv(int n,int nn)
 void LegendreQuad::setLegDeriv(double val, int n,int nn)
 {
 	LegDeriv[n][nn]=val;
+}
+
+double LegendreQuad::getLegSecondDeriv(int n,int nn)
+{
+	return(LegSecondDeriv[n][nn]);
+}
+void LegendreQuad::setLegSecondDeriv(double val, int n,int nn)
+{
+	LegSecondDeriv[n][nn]=val;
 }
 
 double LegendreQuad::getGamma(int n)
