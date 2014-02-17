@@ -35,6 +35,7 @@ void operations::MatrixSolve()
 	// a*M*u+b*y = y
 	// where the y is from the result of the prior solve.
 	a=5.0;
+	b=1.0;
 	dgemv_(&t, &m, &n, &a, &M[0][0], &LDA, &u[0], &b, &y, &incy);
 	
 	for(i=0;i<nSize1;i++)
