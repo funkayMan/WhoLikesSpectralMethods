@@ -2,12 +2,25 @@
 #include <iostream>
 #include "goo.h"
 
-void goo::setM(int val)
+
+goo::goo(int initial)
 {
-	m=val;
+  std::cout << "initializing goo" << std::endl;
+  setMyPrecious(initial);
 }
 
-int goo::getM()
+goo::~goo(void)
 {
-	return(m);
+  std::cout << "destroying goo" << std::endl;
+}
+
+
+void goo::setMyPrecious(int val)
+{
+	myPrecious=val;
+}
+
+int goo::getMyPrecious()
+{
+	return(myPrecious);
 }
