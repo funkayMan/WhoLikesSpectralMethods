@@ -3,11 +3,20 @@
 #include "moo.h"
 #include "goo.h"
 
+
+moo::moo(int initial) : goo(initial)
+{
+  std::cout << "Constructor for moo." << std::endl;
+}
+
+moo::~moo()
+{
+  std::cout << "Destructor for moo." << std::endl;
+}
+
 int moo::countUp(int val)
 {
-	goo blahblah;
-	std::cout << "new M should be " << blahblah.getM() << std::endl;
-	
-	blahblah.setM(blahblah.getM()+val);
+  setMyPrecious(getMyPrecious()+val);
+  std::cout << "new M should be " << getMyPrecious() << std::endl;
 }
 

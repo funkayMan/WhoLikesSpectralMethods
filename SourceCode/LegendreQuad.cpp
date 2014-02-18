@@ -1,11 +1,26 @@
 /*
+<<<<<<< HEAD
+LGLquadrature.()
+abcissa - Legendre Gauss-Lobatto abcissa
+weights - Gauss-Lobatto Weights
+nSize - Polynomial Degree
+legPoly - Legendre Polynomials on the abcissa
+gamma - normalization parameters
+=======
 
+>>>>>>> funkayMan/funkay_dev
 Function performs calculation of quadrature and weights for Legendre-
 Gauss-Lobatto Quadrature as outlined in "CALCULATION OF GAUSS
 QUADRATURE RULES" Gene H. Golub and John H. Welsch
 ftp://reports.stanford.edu/pub/cstr/reports/cs/tr/67/81/CS-TR-67-81.pdf
 To build this file use the command to compile:
+<<<<<<< HEAD
+g++ -I /home/wookie/eigen-3.0.5/ ClassQuadrature.cpp -o classquad
 
+Use ./classquad to execute.
+=======
+
+>>>>>>> funkayMan/funkay_dev
 
 By: Tyler Arsenault
 */
@@ -296,15 +311,5 @@ void LegendreQuad::setGamma(double val,int n)
 {
   G[n] = val;
 }
-
-
-
-
-
-
-
-
-
-
 
 

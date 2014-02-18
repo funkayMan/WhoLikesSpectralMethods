@@ -7,19 +7,16 @@ using namespace std;
 
 int main()
 {
-goo googoo;
-moo moomoo;
+  int M=5;
+  moo moomoo(M);
 
-int M=5;
-googoo.setM(M);
+  cout << "Initial value of my precious is " << moomoo.getMyPrecious() << endl;
 
-cout << "m = " << googoo.getM() << endl;
+  int N=20;
+  moomoo.countUp(N);
 
-int N=20;
-moomoo.countUp(N);
-
-cout << "After the moo call, m = " << googoo.getM() << endl;
+  cout << "My precious is this much better " << moomoo.getMyPrecious() << endl;
 
 
-return 0;
+  return 0;
 }
