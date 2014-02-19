@@ -1,7 +1,8 @@
 #ifndef LEGQUAD
 #define LEGQUAD
 
-// The biggest matrix we can handle is 10000. If you want more make it bigger.
+// How can I remove this MATSIZE 500 business? I'd like to allocate
+// memory only as I need it, for instance nSize1 x nSize1??
 #define MATSIZE 500
 
 
@@ -10,21 +11,31 @@ class LegendreQuad{
 
 private:
 
-int nSize;	// This is the element size -1
-double x[MATSIZE];	// Collocation pts
 double w[MATSIZE];	// Weights
 double G[MATSIZE];	// The normalizing parameters
 double LegPoly[MATSIZE][MATSIZE];	//Leg polynomial matrix
 double LegDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
+
+
+protected:
+
 double LegSecondDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
 
 
 public:
 
-protected:
+	int nSize;	// This is the element size -1
+	int nSize1;
+	
+	double x[MATSIZE];	// Collocation pts
+
+// Constructor
+	LegendreQuad(int initial=0);
+// Destructor
+	~LegendreQuad();
 // 
-int setElementSize(int value);
-int getElementSize();
+	int setElementSize(int value);
+	int getElementSize();
 
 
 // This function calculates points and weights for LGL quadrature

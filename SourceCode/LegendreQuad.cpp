@@ -39,9 +39,27 @@ extern "C" void dgemm_(char *TRANSA, char *TRANSB, int *M, int *N,
  int *K, double *ALPHA, double *A, int *LDA, double *B, int *LDB, 
  double *BETA, double *C, int *LDC);
 
+
+// Constructor
+// What I think I am saying is construct LegendreQuad using this nSize.
+LegendreQuad::LegendreQuad(int value)
+{
+	std::cout<< "Constructing LegendreQuad" << std::endl;
+	setElementSize(value);
+}
+// Destructor
+LegendreQuad::~LegendreQuad(void)
+{
+	std::cout << "Destructing LegendreQuad" << std::endl;
+}
+// 
+
+
+
 int LegendreQuad::setElementSize(int value)
 {
 	nSize=value;
+	nSize1=value+1;
 }
 
 int LegendreQuad::getElementSize()
@@ -53,7 +71,6 @@ void LegendreQuad::PointsAndWeights()
 {
 	double fBeta = 1/sqrt(3);
 
-	int nSize1=nSize+1;
 	int i;
 	
 // These are the diagonal elements of chebyshev matrix
@@ -152,7 +169,6 @@ void LegendreQuad::PointsAndWeights()
 // normalizing 
 void LegendreQuad::LegPolynomials()
 {
-	const int nSize1=nSize+1;
 	int i,j;
 	double ii;
 	// Initialize the Legendre Polynomial Matrix
@@ -187,7 +203,6 @@ void LegendreQuad::LegPolynomials()
 
 void LegendreQuad::DerivativeMatrix()
 {
-	const int nSize1=nSize+1;
 	double dummyVar, ii;
 	int i,j;
 	//initialize the first two rows of the derivatives.
@@ -212,8 +227,7 @@ void LegendreQuad::DerivativeMatrix()
 void LegendreQuad::SecondDerivativeMatrix()
 {
 	char tA = 'T';
-	char tB= 'T';
-	int nSize1=nSize+1;
+	char tB = 'T';
 	int M=nSize1;
 	int N=nSize1;
 	int K=nSize1;
@@ -304,8 +318,6 @@ double LegendreQuad::getGamma(int n)
 {
   return(G[n]);
 }
-
-
 
 void LegendreQuad::setGamma(double val,int n)
 {

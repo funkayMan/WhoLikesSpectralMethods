@@ -1,35 +1,37 @@
-#ifndef OPS
-#def OPS
+#ifndef MATOPS
+#define MATOPS
 
-#define MATSIZE 500
 
-class operations
+# include "LegendreQuad.h"
+
+class MatOperations : protected LegendreQuad
 {
 private:
-	int nSize;
-	double K[MATSIZE][MATSIZE];  // Stiffness Matrix
 	double M[MATSIZE][MATSIZE];  // Mass Matrix
-	double Result[MATSIZE][MATSIZE];	// Resultant matrix
-	double u[MATSIZE];
+	
 	double a;
 	
-protected:
-// The matrix system looks like
-// [K+a*M]*u which will be solve as K*u+b*M*u for varying mass matrix form
+public:
+
+// construct & destruct
+	MatOperations(double input_vector=0);
+	~MatOperations();
+
+	double u[MATSIZE];
+	
 	void MatrixSolve();
 	
-	void setVec(double val,int i, int j);
-	double getVec(int i, int j);
+	void setVecIn(double val,int i);
+	double getVecIn(int i);
+	
+	void setVecOut(double val,int i);
+	double getVecOut(int i);
 	
 	void setMass(double val,int i, int j);
 	double getMass(int i, int j);
 	
-	void setStiffness(double val,int i, int j);
-	double getStiffness(int i, int j);
-	
-	void setMatrixSoln(double val, int i, int j);
-	double getMatrixSoln(int i, int j);
 public:
-}
+	double result[MATSIZE];	// Resultant matrix
+};
 
 #endif

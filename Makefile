@@ -16,13 +16,16 @@ BLASLINK = -lblas
 	$(CC) $(CFLAGS) -c $<
 
 TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o TheMain.o
-	$(CC) $(CFLAGS) $(LPKLINK) $(BLASLINK) $(LPKLIB) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY)
+	$(CC) $(CFLAGS) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY) $(LPKLINK) $(BLASLINK) $(LIB) 
 
 LegendreQuad.o: 
-	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LPKLIB) $(LPKLINK) $(BLASLINK) -o LegendreQuad.o
+	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o LegendreQuad.o
+	
+MatrixOperations.o: 
+	$(CC) $(CFLAGS) -c $(FP)MatrixOperations.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o MatrixOperations.o
 
 TheMain.o:
-	$(CC) $(CFLAGS) -c $(FP)TheMain.cpp $(LPKLIB) $(LPKLINK) -o TheMain.o
+	$(CC) $(CFLAGS) -c $(FP)TheMain.cpp $(LIB) $(LPKLINK) -o TheMain.o
 
 clean:	
 	rm -f TheMain *.o *~
