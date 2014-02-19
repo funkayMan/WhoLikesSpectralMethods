@@ -14,7 +14,7 @@ private:
 public:
 
 // construct & destruct
-	MatOperations(double input_vector=0);
+	MatOperations(int value=0);
 	~MatOperations();
 
 	double u[MATSIZE];

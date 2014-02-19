@@ -15,8 +15,8 @@ BLASLINK = -lblas
 	@echo 'Compiling $<'
 	$(CC) $(CFLAGS) -c $<
 
-TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o TheMain.o
-	$(CC) $(CFLAGS) -o $@ $@.o LegendreQuad.o $(LINK) $(UTILITY) $(LPKLINK) $(BLASLINK) $(LIB) 
+TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o MatrixOperations.o TheMain.o
+	$(CC) $(CFLAGS) -o  $@ $@.o $(LINK) LegendreQuad.o MatrixOperations.o $(UTILITY) $(LPKLINK) $(BLASLINK) $(LIB) 
 
 LegendreQuad.o: 
 	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o LegendreQuad.o

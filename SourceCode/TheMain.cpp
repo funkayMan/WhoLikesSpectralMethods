@@ -39,8 +39,9 @@ int main(int argc,char **argv)
 	for(i=0;i<N+1;i++)
 	{
 		std::cout << dumdum.getVecOut(i) << std::endl;
-		
+			
 	}
+}
 	
 
-}
+
