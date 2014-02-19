@@ -30,6 +30,7 @@ void MatOperations::MatrixSolve()
 	int LDA = nSize1;
 	int incx = 1;
 	int incy = 1;
+	int i; // iterator variable used in for loops.
 	
 	double a = 1.0;
 	double b=0.0;
