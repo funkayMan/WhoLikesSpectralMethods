@@ -68,7 +68,7 @@ void MatOperations::MatrixSolve()
 	// set M as identity for now.
 	for(i=0;i<nSize1;i++)
 	{
-		M[i][i]=1.0;
+		M[i][i]=getWeight(i);
 	}
 	
 	a=5.0;	// wavespeed
