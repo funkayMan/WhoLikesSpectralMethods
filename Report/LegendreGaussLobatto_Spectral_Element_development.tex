@@ -1,5 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[12pt]{article}% insert '[draft]' option to show overfull boxes
+\usepackage{amsmath}
 \usepackage{graphicx,subfigure}
 \usepackage[footnotesize]{caption}
 \usepackage{wrapfig}
@@ -18,7 +19,77 @@ Using Legendre polynomials on a Gauss-Lobatto quadrature.
 
 \[P_n(x)=\frac{2n-1}{n}xP_{n-1}(x)-(n-1)P_{n-2}(x)\]
 %
-\[P'_n(x)=-(2n-1)P_{n-1}(x)+P'_{n-2}(x)\]
+\[P'_n(x)=(2n-1)P_{n-1}(x)+P'_{n-2}(x)\]
 where $P'_0(x)=0$ and $P'_1(x)=1$
+
+
+\subsubsection*{Define a basis function}
+We need to define a basis function.  We will define it as the Lagrange interpolation polynomial (Equation 5.46 in Hestaven)
+\[l_j(x)=\frac{-1}{N(N+1)}\frac{1-x^2}{x-x_j}\frac{P'_N(x)}{P_N(x_j)}
+.\]
+
+This will cause a problem, $\lim {x\to x_j}=\infty$
+Have to use L'hopital.
+
+The numerator:
+\[-\frac{d}{dx} (1-x^2) P'_N(x)=-P''_N(x)+(x^2P''_N(x)+2xP'_N(x))\]
+\[-P''_N(x)(1-x^2)+2xP'_N(x)\]
+
+The denominator:
+\[\frac{d}{dx}N(N+1)(x-x_j)P_N(x_j)=N(N+1)P_N(x_j)\]
+
+Now we have:
+\[l_j=\frac{-P''(x)(1-x^2)+2xP'(x)}{N(N+1)P_N(x_j)}\]
+
+This will become our basis,
+\[\phi_n=\frac{-P''_N(x)(1-x^2)+2xP'_N(x)}{N(N+1)P_N(x_n)}\]
+I'm confused here. Is $N$ only the $N^{th}$ order polynomial or is this a polynomial sum which should look like,
+\[\phi_n=\sum_{i=0}^N \frac{-P''_i(x)(1-x^2)+2xP'_i(x)}{N(N+1)P_i(x_n)}\]
+
+\subsection*{Weak formulation}
+
+Refering to p.120 in Hestaven.
+
+%The basis function we will choose is:
+%\[\phi_n(x_i)=P_{n+1}(x_i)-P_{n-1}(x_i)\]
+
+This will be used in our approximation with coefficients $a_n(t_i)$ as,
+
+\[u_N(x,t)=\sum_{n=1}^{N-1}a_n(t)\,\phi_n(x_i)\]
+
+\[\frac{\partial}{\partial t} u_N(x,t)=\sum_{n=1}^{N-1}a_n'(t)\,\phi_n(x_i)\]
+
+\[\frac{\partial ^2}{\partial x ^2} u_N(x,t)=\sum_{n=1}^{N-1}a_n(t)\,\phi_n''(x_i).\]
+
+
+
+\[ \frac{\partial}{\partial t}  u_N+\frac{\partial ^2}{\partial x ^2}u_N=f(x)\]
+
+we take use the weak, so we take the inner product with respect to a test function $\phi_m(x)$,
+
+\[\int_{-1}^{1} \left(a_n'(t)\,\phi_n(x_i) + a_n(t)\,\phi_n''(x_i)\right) \phi_m(x_i)\,dx=\int_{-1}^{1} f(x_i)\phi_m(x)\,dx\]
+
+\[\int_{-1}^{1} a_n'(t)\,\phi_n(x_i)\,\phi_m(x_i)\,dx + \int_{-1}^{1}a_n(t)\,\phi_n''(x_i) \phi_m(x_i)\,dx=\int_{-1}^{1} f(x_i)\phi_m(x)\,dx.\]
+
+The mass term $\int_{-1}^{1} a_n'(t)\, \phi_n(x_i)\,
+\phi_m(x_i)\,dx$ will be given as  
+\[M_{m,n}=\begin{cases} w(x_i)& m=n \\ 0 & \neq n\end{cases}\]
+where $\int_{-1}^{1} a_n'(t)\, \phi_n(x_i)\,
+\phi_m(x_i)\,dx=a'_n(t)M_{m,n}$.
+
+
+The symmetric stiffness term $\int_{-1}^{1}a_n(t)\,\phi_n''(x_i) \phi_m(x_i)\,dx$ will be integrated by parts to get,
+
+\[\phi_n(x_i) \phi_m'(x_i)\Big|_{-1}^1-\int_{-1}^{1}a_n(t)\,\phi_n'(x_i) \phi'_m(x_i)\,dx\]
+
+The stiffness matrix term is
+
+\[K_{m,n}=\begin{cases}
+-\sum_{i=1}^N\phi'_n(x_i)\phi'_m(x_i)w_i &  0<n<N
+\\
+????? &  n=0\\
+????? &  n=N
+\end{cases}\]
+
 
 \end{document}

@@ -64,7 +64,7 @@ void MatOperations::MatrixSolve()
 	//*******************************
 	
 	double M[nSize1][nSize1];
-	
+	int i;
 	// set M as identity for now.
 	for(i=0;i<nSize1;i++)
 	{
