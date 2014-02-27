@@ -9,27 +9,27 @@
 // For future reference, Legendre-Gauss-Lobatto=LGL
 class LegendreQuad{
 
-protected:
+public:
 
 double w[MATSIZE];	// Weights
 double G[MATSIZE];	// The normalizing parameters
 double LegPoly[MATSIZE][MATSIZE];	//Leg polynomial matrix
 double LegDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
 
-public:
 
-	int nSize;	// This is the element size -1
-	int nSize1;
-	
-	double x[MATSIZE];	// Collocation pts
+
+int nSize;	// This is the element size -1
+int nSize1;
+
+double x[MATSIZE];	// Collocation pts
 
 // Constructor
-	LegendreQuad(int initial=0);
+LegendreQuad(int initial=0);
 // Destructor
-	~LegendreQuad();
+~LegendreQuad();
 // 
-	int setElementSize(int value);
-	int getElementSize();
+int setElementSize(int value);
+int getElementSize();
 
 
 // This function calculates points and weights for LGL quadrature

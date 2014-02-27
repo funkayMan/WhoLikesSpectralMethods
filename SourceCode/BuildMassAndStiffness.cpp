@@ -6,15 +6,13 @@
 # include "BuildMassAndStiffness.h"
 
 
-// matrix -vector multiply
-//  y := alpha*A*x + beta*y
-extern "C" void dgemv_(char *TRANS, int *M, int *N, double *ALPHA,double *A, int *LDA, double* X, int *INCX, double *BETA, double *Y,int *INCY );
-
-
 // Not totally sure this syntax makes sense.
 BuildMassStiffness::BuildMassStiffness(int value) : LegendreQuad(value)
 {
 	std::cout << "Constructing MatrixOperations " << std::endl;
+	// call the functions from legendreQuad so we have that info.
+	PointsAndWeights();
+	LegPolynomials();
 }
 
 BuildMassStiffness::~BuildMassStiffness()
@@ -24,12 +22,13 @@ BuildMassStiffness::~BuildMassStiffness()
 
 
 void BuildMassStiffness::buildMass()
-{
+{	
+
 	int i,j;
 	for(i=0;i<nSize1;i++)
 	{
 		setMass(getWeight(i),i,i);
-		std::cout << getWeight(i) << std::endl;
+		//~ std::cout << getWeight(i) << std::endl;
 	}
 	
 	std::cout << "\n The Mass Matrix: " << std::endl;
@@ -81,9 +80,7 @@ void BuildMassStiffness::buildStiffness()
 			std::cout << getStiffness(i,j) <<"\t";			
 		}
 		std::cout << std::endl;
-	}
-	
-	
+	}	
 }
 
 void BuildMassStiffness::setMass(double val,int i, int j)

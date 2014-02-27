@@ -10,7 +10,8 @@ int main(int argc,char **argv)
 	
 	BuildMassStiffness dumdum(N);	
 	
-
+	//~ dumdum.PointsAndWeights();
+	//~ dumdum.LegPolynomials();
 	
 	dumdum.buildMass();	
 	dumdum.buildStiffness();
