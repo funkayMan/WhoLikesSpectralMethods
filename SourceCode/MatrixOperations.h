@@ -7,8 +7,8 @@
 class MatOperations : protected LegendreQuad
 {
 private:
-	double M[MATSIZE][MATSIZE];  // Mass Matrix
-	
+	double M[MATSIZE][MATSIZE];	// Mass Matrix
+	double K[MATSIZE][MATSIZE];	// Stiffness Matrix	
 	double a;
 	
 public:
@@ -29,6 +29,9 @@ public:
 	
 	void setMass(double val,int i, int j);
 	double getMass(int i, int j);
+	
+	void setStiffness(double val,int i, int j);
+	double getStiffness(int i, int j);
 	
 public:
 	double result[MATSIZE];	// Resultant matrix

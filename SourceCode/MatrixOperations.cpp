@@ -111,3 +111,12 @@ double MatOperations::getMass(int i, int j)
 {
 	return(M[i][j]);
 }
+
+void setStiffness(double val,int i, int j);
+{
+	K[i][j]=val;
+}
+double getStiffness(int i, int j);
+{
+	return(K[i][j]);
+}

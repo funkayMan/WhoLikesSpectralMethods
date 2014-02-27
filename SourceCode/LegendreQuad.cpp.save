@@ -105,6 +105,7 @@ void LegendreQuad::PointsAndWeights()
 	//~ for(i=0;i<nSize; i++)
 	//~ {
 		//~ std::cout << E[i] << std::endl;
+LegendreQuad::LegendreQuad(int value)
 	//~ }
 	//~ std::cout << "\n\n";
 //~ 
@@ -224,6 +225,44 @@ void LegendreQuad::DerivativeMatrix()
 	
 }
 
+void LegendreQuad::SecondDerivativeMatrix()
+{
+	char tA = 'T';
+	char tB = 'T';
+	int M=nSize1;
+	int N=nSize1;
+	int K=nSize1;
+	int LDA=nSize1;
+	int LDB=nSize1;
+	int LDC=nSize1;
+	
+	double ALPHA = 1.0;
+	double BETA = 0.0;
+	
+	double A[nSize1][nSize1];
+	double C[nSize1][nSize1];
+	
+	int i,j;
+	for(j=0;j<nSize1;j++)
+	{
+		for(i=0;i<nSize1;i++)
+		{
+			A[i][j]=getLegDeriv(i,j);
+
+		}
+	}
+	// call the BLAS function dgemm
+	dgemm_(&tA,&tB,&M,&N,&K,&ALPHA,&A[0][0],&LDA,&A[0][0],&LDB,&BETA,&C[0][0],&LDC);
+	// Will need to transpose C. the output
+	for(i=0;i<nSize1;i++)
+	{
+		for(j=0;j<nSize1;j++)
+		{
+			setLegSecondDeriv(C[i][j],j,i);
+		}
+	}	
+}
+
 double LegendreQuad::getCollocation(int n)
 {
   return(x[n]);
@@ -265,6 +304,15 @@ double LegendreQuad::getLegDeriv(int n,int nn)
 void LegendreQuad::setLegDeriv(double val, int n,int nn)
 {
 	LegDeriv[n][nn]=val;
+}
+
+double LegendreQuad::getLegSecondDeriv(int n,int nn)
+{
+	return(LegSecondDeriv[n][nn]);
+}
+void LegendreQuad::setLegSecondDeriv(double val, int n,int nn)
+{
+	LegSecondDeriv[n][nn]=val;
 }
 
 double LegendreQuad::getGamma(int n)

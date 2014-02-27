@@ -1,12 +1,20 @@
 ccc
-N=20;
+N=5;
 [N1,lval,x,w,gamma] = leg_quad(N);
 lp(1,:)=zeros(N+1,1);
 lp(2,:)=ones(N+1,1);
 for i = 3:N+1
     lp(i,:)=(2*(i-1)-1)*lval(i-1,:)+lp(i-2,:);
 end
-
+lp
+for j = 1:N1
+    for n = 1:N1
+        phi(j,:)=-(1-x.^2)./(n*(n+1)*(x-x(j)))*lp(n;
+    end
+end
+plot(x,phi)
+hold on
+plot(x,zeros(size(x)),'rs','LineWidth',4)
 % for j = 1:N
 %     clf
 %     plot(x,lp(j,:),'r');
@@ -17,17 +25,3 @@ end
 %
 %
 % end
-
-% Lets make a basis
-for k=2:N
-    phi(k-1,:)=(lval(k+1,:)-lval(k-1,:));
-end
-
-for m = 1:N+1
-    for n = 1:N+1
-        for i = 1:N+1
-            K(m,n)=phi(i,:)*phi(j,:)'*w(i));
-        end
-    end
-end
-

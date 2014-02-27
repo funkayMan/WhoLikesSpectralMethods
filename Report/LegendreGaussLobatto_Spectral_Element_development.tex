@@ -17,79 +17,96 @@
 
 Using Legendre polynomials on a Gauss-Lobatto quadrature.
 
-\[P_n(x)=\frac{2n-1}{n}xP_{n-1}(x)-(n-1)P_{n-2}(x)\]
+\begin{equation}
+P_n(x)=\frac{2n-1}{n}xP_{n-1}(x)-(n-1)P_{n-2}(x)
+\end{equation}
 %
-\[P'_n(x)=(2n-1)P_{n-1}(x)+P'_{n-2}(x)\]
+\begin{equation}P'_n(x)=(2n-1)P_{n-1}(x)+P'_{n-2}(x)
+\end{equation}
 where $P'_0(x)=0$ and $P'_1(x)=1$
 
 
 \subsubsection*{Define a basis function}
-We need to define a basis function.  We will define it as the Lagrange interpolation polynomial (Equation 5.46 in Hestaven)
-\[l_j(x)=\frac{-1}{N(N+1)}\frac{1-x^2}{x-x_j}\frac{P'_N(x)}{P_N(x_j)}
-.\]
+We need to define a basis function.  We will define it as the Lagrange interpolation polynomial (Equation 5.46 in Hesthaven)
+\begin{equation}
+\phi_j(x)=\frac{-1}{n(n+1)}\frac{1-x^2}{x-x_j}\frac{P'_n(x)}{P_n(x_j)}
+.\end{equation}
 
-This will cause a problem, $\lim {x\to x_j}=\infty$
-Have to use L'hopital.
-
-The numerator:
-\[-\frac{d}{dx} (1-x^2) P'_N(x)=-P''_N(x)+(x^2P''_N(x)+2xP'_N(x))\]
-\[-P''_N(x)(1-x^2)+2xP'_N(x)\]
-
-The denominator:
-\[\frac{d}{dx}N(N+1)(x-x_j)P_N(x_j)=N(N+1)P_N(x_j)\]
-
-Now we have:
-\[l_j=\frac{-P''(x)(1-x^2)+2xP'(x)}{N(N+1)P_N(x_j)}\]
-
-This will become our basis,
-\[\phi_n=\frac{-P''_N(x)(1-x^2)+2xP'_N(x)}{N(N+1)P_N(x_n)}\]
-I'm confused here. Is $N$ only the $N^{th}$ order polynomial or is this a polynomial sum which should look like,
-\[\phi_n=\sum_{i=0}^N \frac{-P''_i(x)(1-x^2)+2xP'_i(x)}{N(N+1)P_i(x_n)}\]
 
 \subsection*{Weak formulation}
 
 Refering to p.120 in Hestaven.
 
-%The basis function we will choose is:
-%\[\phi_n(x_i)=P_{n+1}(x_i)-P_{n-1}(x_i)\]
+\begin{equation}
+u_t+u_{xx}=f(x)
+\end{equation}
 
-This will be used in our approximation with coefficients $a_n(t_i)$ as,
+we take the weak form, so we take the inner product with respect to a test function $\phi_m(x)$,
 
-\[u_N(x,t)=\sum_{n=1}^{N-1}a_n(t)\,\phi_n(x_i)\]
+\begin{equation}
+\int_{\Omega} \left(u_t + u_{xx}\right) \phi_m(x)\,d\Omega=\int_{\Omega} f(x)\phi_m(x)\,d\Omega
+\end{equation}
 
-\[\frac{\partial}{\partial t} u_N(x,t)=\sum_{n=1}^{N-1}a_n'(t)\,\phi_n(x_i)\]
+\begin{equation}\int_{\Omega} u_t\phi_m(x)\,d\Omega +\int_{\Omega}u_{xx} \phi_m(x)\,d\Omega=\int_{\Omega} f(x)\phi_m(x)\,d\Omega.
+\end{equation}
 
-\[\frac{\partial ^2}{\partial x ^2} u_N(x,t)=\sum_{n=1}^{N-1}a_n(t)\,\phi_n''(x_i).\]
-
-
-
-\[ \frac{\partial}{\partial t}  u_N+\frac{\partial ^2}{\partial x ^2}u_N=f(x)\]
-
-we take use the weak, so we take the inner product with respect to a test function $\phi_m(x)$,
-
-\[\int_{-1}^{1} \left(a_n'(t)\,\phi_n(x_i) + a_n(t)\,\phi_n''(x_i)\right) \phi_m(x_i)\,dx=\int_{-1}^{1} f(x_i)\phi_m(x)\,dx\]
-
-\[\int_{-1}^{1} a_n'(t)\,\phi_n(x_i)\,\phi_m(x_i)\,dx + \int_{-1}^{1}a_n(t)\,\phi_n''(x_i) \phi_m(x_i)\,dx=\int_{-1}^{1} f(x_i)\phi_m(x)\,dx.\]
-
-The mass term $\int_{-1}^{1} a_n'(t)\, \phi_n(x_i)\,
-\phi_m(x_i)\,dx$ will be given as  
-\[M_{m,n}=\begin{cases} w(x_i)& m=n \\ 0 & \neq n\end{cases}\]
-where $\int_{-1}^{1} a_n'(t)\, \phi_n(x_i)\,
-\phi_m(x_i)\,dx=a'_n(t)M_{m,n}$.
+We will discretize like 
+\begin{equation}
+u=\sum_{j=0}^N\,u_j\,\phi_j.
+\end{equation}
+The mass term $\sum_{j=0}^N \int_{-1}^{1} u_j'\phi_j\,\phi_m\,dx$ will be given as  
+\begin{equation}M_{m,n}=\begin{cases} w(x)& m=n \\ 0 & \neq n\end{cases}
+\end{equation}
+where $\int_{-1}^{1} u_n'(t)\, \phi_n(x)\,
+\phi_m(x)\,dx=u'_n(t)M_{m,n}$.
 
 
-The symmetric stiffness term $\int_{-1}^{1}a_n(t)\,\phi_n''(x_i) \phi_m(x_i)\,dx$ will be integrated by parts to get,
+The symmetric stiffness term $\int_\Omega u_{xx} \phi_m(x)\,d\Omega$ will be integrated by parts to get to show how this works between two elements we will use the domain $-3\leq x \leq 1$ where a unit element is $-1\leq x \leq 1$.
+\begin{equation}
+\int_{-3}^1 u_{xx} \phi_m\,dx
+\end{equation}
 
-\[\phi_n(x_i) \phi_m'(x_i)\Big|_{-1}^1-\int_{-1}^{1}a_n(t)\,\phi_n'(x_i) \phi'_m(x_i)\,dx\]
+\begin{equation}
+\int_{-3}^{-1} u_n(t)\,\phi_n''(x) \phi_m(x)\,dx+\int_{-1}^1 u_n(t)\,\phi_n''(x) \phi_m(x)\,dx
+\end{equation}
+integrating by parts,
+\begin{align}
+u^{(i)}_n(t)\,\phi_n'(x)& \phi_m(x)\Big|_{-3}^{-1}-\int_{-3}^{-1} u^{(i)}_n(t)\,\phi_n'(x) \phi'_m(x)\,dx...\\
+&+u_n^{(i+1)}(t)\,\phi_n'(x) \phi_m(x)\Big|_{-1}^{1}-\int_{-1}^{1} u^{(i+1)}_n(t)\,\phi_n'(x) \phi'_m(x)\,dx.\nonumber
+\end{align}
+Now evaluate with the basis being $1$ at $x=-1$ and zero otherwise.
+\begin{align}
+u_n^{(i)}(t)\,\phi_n'(-1)& \phi_m(-1)-\int_{-3}^{-1} u_n^{(i)}(t)\,\phi_n'(x) \phi'_m(x)\,dx...\\
+&-u^{(i+1)}_n(t)\,\phi_n'(-1) \phi_m(-1)-\int_{-1}^{1} u_n^{(i+1)}(t)\,\phi_n'(x) \phi'_m(x)\,dx\nonumber
+\end{align}
+\begin{equation}
+-\int_{-3}^{-1} u^{(i)}_n(t)\,\phi_n'(x) \phi'_m(x)\,dx-\int_{-1}^{1} u^{(i+1)}_n(t)\,\phi_n'(x) \phi'_m(x)\,dx
+\end{equation}
+Its discretization time!!! and addition of the element counter $i$, where $i=0,1,2,...,K$. Replace $j$ with $n$ on the basis. blah.
+\begin{equation}
+u^{(i)}_n=\sum_{j=0}^N u^{(i)}_j\phi_j(x)
+\end{equation}
+\begin{equation}
+\sum_{j=0}^N u^{(i)}_j\left[-\int_{-3}^{-1} \phi_n'(x) \phi'_m(x)\,dx\right]+\sum_{j=0}^N u^{(i+1)}_j\left[-\int_{-1}^{1} \phi_n'(x) \phi'_m(x)\,dx\right].
+\end{equation}
+We see the term $\int_{-1}^{1} \phi_n'(x) \phi'_m(x)\,dx$ is repeating.
 
-The stiffness matrix term is
+From Hesthaven p. 95 the differentiation matrix takes the form
+\begin{equation}
+D_{ij}=\begin{cases}
+-\frac{N(N+1)}{4} &i=j=0\\
+0& i=j\in [1,...,N-1]\\
+\frac{P_n(x_i)}{P_N(x_j)}\frac{1}{x_i-x_j} & i\neq j\\
+\frac{N(N+1)}{4} & i=j=N
+\end{cases}
+\end{equation}
+The elemental stiffness matrix will take the form
+\begin{equation}
+K_{m,n}=-D_{ij}D_{ij}
+\end{equation}
 
-\[K_{m,n}=\begin{cases}
--\sum_{i=1}^N\phi'_n(x_i)\phi'_m(x_i)w_i &  0<n<N
-\\
-????? &  n=0\\
-????? &  n=N
-\end{cases}\]
+
+
 
 
 \end{document}
