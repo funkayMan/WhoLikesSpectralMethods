@@ -4,6 +4,8 @@
 \usepackage{graphicx,subfigure}
 \usepackage[footnotesize]{caption}
 \usepackage{wrapfig}
+\usepackage{color}
+
 
 \title{Development of a Spectral-Element code}
 
@@ -90,20 +92,31 @@ u^{(i)}_n=\sum_{j=0}^N u^{(i)}_j\phi_j(x)
 \sum_{j=0}^N u^{(i)}_j\left[-\int_{-3}^{-1} \phi_n'(x) \phi'_m(x)\,dx\right]+\sum_{j=0}^N u^{(i+1)}_j\left[-\int_{-1}^{1} \phi_n'(x) \phi'_m(x)\,dx\right].
 \end{equation}
 We see the term $\int_{-1}^{1} \phi_n'(x) \phi'_m(x)\,dx$ is repeating.
+The elemental stiffness matrix will take the form
+\begin{equation}
+K_{m,n}=-\int_{-1}^{1} \phi_n'(x) \phi'_m(x)\,dx.
+\end{equation}
 
 From Hesthaven p. 95 the differentiation matrix takes the form
 \begin{equation}
 D_{ij}=\begin{cases}
 -\frac{N(N+1)}{4} &i=j=0\\
 0& i=j\in [1,...,N-1]\\
-\frac{P_n(x_i)}{P_N(x_j)}\frac{1}{x_i-x_j} & i\neq j\\
+\frac{P_N(x_i)}{P_N(x_j)}\frac{1}{x_i-x_j} & i\neq j\\
 \frac{N(N+1)}{4} & i=j=N
 \end{cases}
 \end{equation}
-The elemental stiffness matrix will take the form
+This means that we can approximate 
 \begin{equation}
-K_{m,n}=-D_{ij}D_{ij}
+\frac{d}{dx}\,u = D_1 \,u
 \end{equation}
+\textcolor{red}{\textbf{this also means that correct?}}
+\begin{equation}
+\frac{d^2}{dx^2}\,u = D_2 \,u=D_1\,D_1 \,u
+\end{equation}
+This means the stiffness matrix is just $D_1\,D_1$??
+
+
 
 
 

@@ -40,7 +40,7 @@ void PointsAndWeights();
 void LegPolynomials();
 
 // This function calculated the derivative matrix
-void DerivativeMatrix();
+//~ void DerivativeMatrix();
 
 // Set and Get collocations Pts
 double getCollocation(int n);
@@ -55,8 +55,8 @@ double getLegPolys(int n,int nn);
 void setLegPolys(double val, int n,int nn);
 
 // Set and get 1st Derivative matrix
-double getLegDeriv(int n,int nn);
-void setLegDeriv(double val, int n,int nn);
+//~ double getLegDeriv(int n,int nn);
+//~ void setLegDeriv(double val, int n,int nn);
 
 // Set and get normalization parameters
 double getGamma(int n);
