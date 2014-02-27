@@ -31,16 +31,19 @@ void BuildMassStiffness::buildMass()
 		//~ std::cout << getWeight(i) << std::endl;
 	}
 	
-	std::cout << "\n The Mass Matrix: " << std::endl;
-	for(i=0;i<nSize1;i++)
-	{
-		for(j=0;j<nSize1;j++)
-		{
-			
-			std::cout << getMass(i,j) <<"\t";			
-		}
-		std::cout << std::endl;
-	}
+	//*******************************************
+	//  Print Mass Matrix 
+	//*******************************************
+	//~ std::cout << "\n The Mass Matrix: " << std::endl;
+	//~ for(i=0;i<nSize1;i++)
+	//~ {
+		//~ for(j=0;j<nSize1;j++)
+		//~ {
+			//~ 
+			//~ std::cout << getMass(i,j) <<"\t";			
+		//~ }
+		//~ std::cout << std::endl;
+	//~ }
 }
 
 void BuildMassStiffness::buildStiffness()
@@ -56,31 +59,36 @@ void BuildMassStiffness::buildStiffness()
 			{
 				dummy=-(double)nSize*((double)nSize+1.0)/4.0;
 			}
-			else if(i==j && i>= 1 && i <= nSize)
+			if(i==j && i == nSize)
+			{
+				dummy=(double)nSize*((double)nSize+1.0)/4.0;
+			}
+			if(i==j && i>= 1 && i <= nSize-1)
 			{
 				dummy=0.0;
 			}
-			else if(i==j && i == nSize1)
-			{
-				dummy=double(nSize);
-			}
-			else
-			{
-				dummy=getLegPolys(nSize1,i)/(getLegPolys(nSize1,i)*getCollocation(i)-getCollocation(j));
+
+			if(i!=j)
+			{	
+				//~ dummy=1.0;
+				dummy=(getLegPolys(nSize,i)/getLegPolys(nSize,j))/(getCollocation(i)-getCollocation(j));
 			}
 			setStiffness(dummy,i,j);			
 		}
 	}
+	//*******************************************
+	//  Print Stiffness Matrix 
+	//*******************************************
 	
-	std::cout << "\n The Stiffness Matrix: " << std::endl;
-	for(i=0;i<nSize1;i++)
-	{
-		for(j=0;j<nSize1;j++)
-		{
-			std::cout << getStiffness(i,j) <<"\t";			
-		}
-		std::cout << std::endl;
-	}	
+	//~ std::cout << "\n The Stiffness Matrix: " << std::endl;
+	//~ for(i=0;i<nSize1;i++)
+	//~ {
+		//~ for(j=0;j<nSize1;j++)
+		//~ {
+			//~ std::cout << getStiffness(i,j) <<"\t";			
+		//~ }
+		//~ std::cout << std::endl;
+	//~ }	
 }
 
 void BuildMassStiffness::setMass(double val,int i, int j)

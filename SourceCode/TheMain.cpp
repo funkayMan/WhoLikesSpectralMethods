@@ -6,7 +6,7 @@
 
 int main(int argc,char **argv)
 {
-	int N=6;
+	int N=5;
 	
 	BuildMassStiffness dumdum(N);	
 	
