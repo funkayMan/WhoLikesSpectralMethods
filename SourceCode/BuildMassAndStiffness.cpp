@@ -1,7 +1,5 @@
 #include <iostream>
 #include <math.h>
-
-
 # include "LegendreQuad.h"
 # include "BuildMassAndStiffness.h"
 
@@ -10,7 +8,7 @@ double *ALPHA, double *A, int *LDA, double* B, int *LDB, double *BETA,
 double *C,int *LDC );
 
 
-// Not totally sure this syntax makes sense.
+
 BuildMassStiffness::BuildMassStiffness(int value) : LegendreQuad(value)
 {
 	std::cout << "Constructing BuildMassStiffness" << std::endl;

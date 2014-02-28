@@ -4,6 +4,7 @@
 
 # include "LegendreQuad.h"
 # include "BuildMassAndStiffness.h"
+# include "MatrixAssembly.h"
 
 class MatOperations : protected BuildMassStiffness
 {

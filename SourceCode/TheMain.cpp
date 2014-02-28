@@ -1,7 +1,10 @@
 #include <iostream>
-#include "LegendreQuad.h"
-#include "BuildMassAndStiffness.h"
+
+# include "LegendreQuad.h"
+# include "BuildMassAndStiffness.h"
+# include "MatrixAssembly.h"
 # include "MatrixOperations.h"
+
 //using namespace std;
 
 

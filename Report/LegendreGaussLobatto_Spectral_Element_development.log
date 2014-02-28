@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2014.1.31)  27 FEB 2014 17:20
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2014.1.31)  28 FEB 2014 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -248,14 +248,14 @@ Package caption Info: End \AtBeginDocument code.
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4]
 (./LegendreGaussLobatto_Spectral_Element_development.aux) ) 
 Here is how much of TeX's memory you used:
- 3328 strings out of 495059
- 49803 string characters out of 3182030
- 110815 words of memory out of 3000000
- 6485 multiletter control sequences out of 15000+200000
- 9327 words of font info for 34 fonts, out of 3000000 for 9000
+ 3330 strings out of 495059
+ 49827 string characters out of 3182030
+ 111815 words of memory out of 3000000
+ 6487 multiletter control sequences out of 15000+200000
+ 9626 words of font info for 35 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,12n,38p,295b,203s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texlive/
@@ -268,11 +268,11 @@ sfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on LegendreGaussLobatto_Spectral_Element_development.pdf (3 page
-s, 108413 bytes).
+Output written on LegendreGaussLobatto_Spectral_Element_development.pdf (4 page
+s, 111003 bytes).
 PDF statistics:
- 54 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 57 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

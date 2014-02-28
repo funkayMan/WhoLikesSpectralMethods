@@ -5,6 +5,7 @@
 # include "LegendreQuad.h"
 # include "MatrixOperations.h"
 # include "BuildMassAndStiffness.h"
+# include "MatrixAssembly.h"
 
 
 // matrix -vector multiply

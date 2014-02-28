@@ -35,16 +35,13 @@ We need to define a basis function.  We will define it as the Lagrange interpola
 .\end{equation}
 
 
-\subsection*{Weak formulation}
-
-Refering to p.120 in Hestaven.
-
+\section{Galerkin formulation}
+Using the equation for the 1D Helmoltz,
 \begin{equation}
 u_t+u_{xx}=f(x)
 \end{equation}
 
-we take the weak form, so we take the inner product with respect to a test function $\phi_m(x)$,
-
+Take the inner product with respect to a test function $\phi_m(x)$,
 \begin{equation}
 \int_{\Omega} \left(u_t + u_{xx}\right) \phi_m(x)\,d\Omega=\int_{\Omega} f(x)\phi_m(x)\,d\Omega
 \end{equation}
@@ -52,18 +49,26 @@ we take the weak form, so we take the inner product with respect to a test funct
 \begin{equation}\int_{\Omega} u_t\phi_m(x)\,d\Omega +\int_{\Omega}u_{xx} \phi_m(x)\,d\Omega=\int_{\Omega} f(x)\phi_m(x)\,d\Omega.
 \end{equation}
 
-We will discretize like 
+We are going to approximate the solution with,
 \begin{equation}
-u=\sum_{j=0}^N\,u_j\,\phi_j.
+u_N(x,t)=\sum_{n=0}^Na_n(t)\phi_n(x)
 \end{equation}
-The mass term $\sum_{j=0}^N \int_{-1}^{1} u_j'\phi_j\,\phi_m\,dx$ will be given as  
-\begin{equation}M_{m,n}=\begin{cases} w(x)& m=n \\ 0 & \neq n\end{cases}
+\section{Unsteady Term}
+The unsteady term becomes 
+\begin{eqnarray}
+\frac{1}{\gamma_m}\sum_{n=0}^N \int_{-1}^{1} a_n'\phi_n\,\phi_m w(x)\,dx \\
+\frac{1}{\gamma_m}\sum_{n=0}^N a_n'\int_{-1}^{1}\phi_n\,\phi_m w(x)\,dx\\
+\end{eqnarray}
+The integral of the product of the basis functions will be zero except when $m=n$, where it will be $w(x)$. Giving the unsteady term as 
+\begin{equation}M_{m,n}=\begin{cases} w(x)& m=n \\ 0 & m\neq n\end{cases}
 \end{equation}
-where $\int_{-1}^{1} u_n'(t)\, \phi_n(x)\,
-\phi_m(x)\,dx=u'_n(t)M_{m,n}$.
+We have the unsteady term as
+\begin{equation}
+\frac{1}{\gamma_m}M_{m,n}a'(t)
+\end{equation}
 
-
-The symmetric stiffness term $\int_\Omega u_{xx} \phi_m(x)\,d\Omega$ will be integrated by parts to get to show how this works between two elements we will use the domain $-3\leq x \leq 1$ where a unit element is $-1\leq x \leq 1$.
+\section{The spatial Term}
+The spacial derivative term $\int_\Omega u_{xx} \phi_m(x)\,d\Omega$ will be integrated by parts to get to show how this works between two elements we will use the domain $-3\leq x \leq 1$ where a unit element is $-1\leq x \leq 1$.
 \begin{equation}
 \int_{-3}^1 u_{xx} \phi_m\,dx
 \end{equation}
