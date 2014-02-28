@@ -3,8 +3,9 @@
 
 
 # include "LegendreQuad.h"
+# include "BuildMassAndStiffness.h"
 
-class MatOperations : protected LegendreQuad
+class MatOperations : protected BuildMassStiffness
 {
 private:
 	double M[MATSIZE][MATSIZE];	// Mass Matrix
@@ -17,24 +18,18 @@ public:
 	MatOperations(int value=0);
 	~MatOperations();
 
-	double u[MATSIZE];
-	
-	void MatrixSolve();
-	
-	void setVecIn(double val,int i);
-	double getVecIn(int i);
-	
-	void setVecOut(double val,int i);
-	double getVecOut(int i);
-	
-	void setMass(double val,int i, int j);
-	double getMass(int i, int j);
-	
-	void setStiffness(double val,int i, int j);
-	double getStiffness(int i, int j);
-	
-public:
-	double result[MATSIZE];	// Resultant matrix
+	//~ double u[MATSIZE];
+	//~ 
+	//~ void MatrixSolve();
+	//~ 
+	//~ void setVecIn(double val,int i);
+	//~ double getVecIn(int i);
+	//~ 
+	//~ void setVecOut(double val,int i);
+	//~ double getVecOut(int i);
+	//~ 
+//~ public:
+	//~ double result[MATSIZE];	// Resultant matrix
 };
 
 #endif

@@ -107,15 +107,15 @@ void BuildMassStiffness::buildStiffness()
 	//  Print Stiffness Matrix 
 	//*******************************************
 	
-	std::cout << "\n The second Derivative Matrix: " << std::endl;
-	for(i=0;i<nSize1;i++)
-	{
-		for(j=0;j<nSize1;j++)
-		{
-			std::cout << D2[i][j] <<"\t";			
-		}
-		std::cout << std::endl;
-	}	
+	//~ std::cout << "\n The second Derivative Matrix: " << std::endl;
+	//~ for(i=0;i<nSize1;i++)
+	//~ {
+		//~ for(j=0;j<nSize1;j++)
+		//~ {
+			//~ std::cout << D2[i][j] <<"\t";			
+		//~ }
+		//~ std::cout << std::endl;
+	//~ }	
 }
 
 void BuildMassStiffness::setMass(double val,int i, int j)
