@@ -20,6 +20,7 @@ for ii = 1:N1
     end
 end
 D;
+% The Assembly
 Nel=2;
 K=zeros((Nel)*(ii)-Nel+1);
 for j = 1:Nel
