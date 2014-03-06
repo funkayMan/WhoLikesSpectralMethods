@@ -15,8 +15,8 @@ BLASLINK = -lblas
 	@echo 'Compiling $<'
 	$(CC) $(CFLAGS) -c $<
 
-TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o BuildMassAndStiffness.o MatrixAssembly.o MatrixOperations.o TheMain.o 
-	$(CC) $(CFLAGS) -o  $@ $@.o $(LINK) LegendreQuad.o BuildMassAndStiffness.o MatrixAssembly.o MatrixOperations.o $(UTILITY) $(LPKLINK) $(BLASLINK) $(LIB) 
+TheMain: $(FP)LegendreQuad.cpp LegendreQuad.o BuildMassAndStiffness.o TheMain.o 
+	$(CC) $(CFLAGS) -o  $@ $@.o $(LINK) LegendreQuad.o BuildMassAndStiffness.o $(UTILITY) $(LPKLINK) $(BLASLINK) $(LIB) 
 
 LegendreQuad.o: 
 	$(CC) $(CFLAGS) -c $(FP)LegendreQuad.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o LegendreQuad.o
@@ -24,11 +24,11 @@ LegendreQuad.o:
 BuildMassAndStiffness.o: 
 	$(CC) $(CFLAGS) -c $(FP)BuildMassAndStiffness.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o BuildMassAndStiffness.o
 	
-MatrixAssembly.o:
-	$(CC) $(CFLAGS) -c $(FP)MatrixAssembly.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o MatrixAssembly.o
-	
-MatrixOperations.o: 
-	$(CC) $(CFLAGS) -c $(FP)MatrixOperations.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o MatrixOperations.o
+#~ MatrixAssembly.o:
+	#~ $(CC) $(CFLAGS) -c $(FP)MatrixAssembly.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o MatrixAssembly.o
+	#~ 
+#~ MatrixOperations.o: 
+	#~ $(CC) $(CFLAGS) -c $(FP)MatrixOperations.cpp $(LIB) $(LPKLINK) $(BLASLINK) -o MatrixOperations.o
 
 TheMain.o:
 	$(CC) $(CFLAGS) -c $(FP)TheMain.cpp $(LIB) $(LPKLINK) -o TheMain.o

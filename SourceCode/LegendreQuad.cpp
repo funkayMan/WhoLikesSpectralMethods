@@ -158,7 +158,7 @@ void LegendreQuad::PointsAndWeights()
 //***************************************************
 	for(i=0;i<nSize1;i++)
 	{
-		setCollocation(-1.0*D[i],i);
+		setPoints(-1.0*D[i],i);
 		setWeight(2*pow(Z[i][0],2),i);
 		//~ std::cout << getCollocation(i) << "\t " << getWeight(i) << std::endl;
 	}
@@ -175,7 +175,7 @@ void LegendreQuad::LegPolynomials()
 	for(j=0;j<nSize1;j++)
 	{
 		setLegPolys(1.0, 0, j);
-		setLegPolys(getCollocation(j), 1, j);
+		setLegPolys(getPoints(j), 1, j);
 	}
 	// Define the Legendre Polys
 	double tempNum;
@@ -184,10 +184,23 @@ void LegendreQuad::LegPolynomials()
 		ii=(double)i;
 		for(j=0;j<nSize1;j++)
 		{
-			tempNum=((2.0*ii-1.0)/ii)*getCollocation(j)*getLegPolys(i-1,j)-((ii-1.0)/ii)*getLegPolys(i-2,j);
+			tempNum=((2.0*ii-1.0)/ii)*getPoints(j)*getLegPolys(i-1,j)-((ii-1.0)/ii)*getLegPolys(i-2,j);
 			setLegPolys(tempNum,i,j);
 		}
 	}
+	
+	// Print Legendre Polynomials
+	
+	//~ std::cout << "Legendre Polynomials" << std::endl;
+	//~ for(i=0; i<nSize1; i++)
+	//~ {
+		//~ for(j=0; j<nSize1; j++)
+		//~ {
+			//~ std::cout<< getLegPolys(i,j) << "\t" ;
+		//~ }
+		//~ std::cout << std::endl;
+	//~ }
+	//~ std::cout << "\n\n" << std::endl;
 	
 	// Define the normalizing parameters Gamma
 	for(i=0;i<nSize1;i++)
@@ -200,37 +213,52 @@ void LegendreQuad::LegPolynomials()
 	
 }
 
+//~ 
+void LegendreQuad::DerivativeMatrix()
+{
+	double dummyVar, ii;
+	int i,j;
+	//initialize the first two rows of the derivatives.
+	for(j=0;j<nSize1;j++)
+	{
+		setLegDeriv(0.0,0,j);
+		setLegDeriv(1.0,1,j);
+	}
+	// lp(i,:)=((2*(n)-1)*lval(i-1,:)+lp(i-2,:));
+	// define the legendre polynomlial matrix
+	for(i=2; i<nSize1; i++)
+	{
+		for(j=0; j<nSize1; j++)
+		{
+				ii=(double)i;
+				dummyVar=(2.0*ii-1)*getLegPolys(i-1,j)+getLegDeriv(i-2,j);
+				setLegDeriv(dummyVar,i,j);
+		}
+	}
+	
+//****************************************************
+//				Print derivatives
+//****************************************************
+std::cout << "Derivatives of Legendre Polynomial" << std::endl;
+	for(i=0; i<nSize1; i++)
+	{
+		for(j=0; j<nSize1; j++)
+		{
+			std::cout<< getLegDeriv(i,j) << "\t" ;
+		}
+		std::cout << std::endl;
+	}
+	std::cout<< "\n\n" << std::endl;
+		
+}
 
-//~ void LegendreQuad::DerivativeMatrix()
-//~ {
-	//~ double dummyVar, ii;
-	//~ int i,j;
-	//~ //initialize the first two rows of the derivatives.
-	//~ for(j=0;j<nSize1;j++)
-	//~ {
-		//~ setLegDeriv(0.0,0,j);
-		//~ setLegDeriv(1.0,1,j);
-	//~ }
-	//~ // define the legendre polynomlial matrix
-	//~ for(i=2; i<nSize1; i++)
-	//~ {
-		//~ for(j=0; j<nSize1; j++)
-		//~ {
-			//~ ii=(double)i;
-			//~ dummyVar=-1.0*(2.0*ii-1)*getLegPolys(i-1,j)+getLegDeriv(i-2,j);
-			//~ setLegDeriv(dummyVar,i,j);
-		//~ }
-	//~ }
-	//~ 
-//~ }
-
-double LegendreQuad::getCollocation(int n)
+double LegendreQuad::getPoints(int n)
 {
   return(x[n]);
 }
 
 
-void LegendreQuad::setCollocation(double val,int n)
+void LegendreQuad::setPoints(double val,int n)
 {
   x[n] = val;
 }
@@ -251,21 +279,20 @@ double LegendreQuad::getLegPolys(int n,int nn)
 	return(LegPoly[n][nn]);
 }
 
-// setLegPolys(value, row index, column index)
 void LegendreQuad::setLegPolys(double val, int n,int nn)
 {
 	
 	LegPoly[n][nn]=val;
 }
-
-//~ double LegendreQuad::getLegDeriv(int n,int nn)
-//~ {
-	//~ return(LegDeriv[n][nn]);
-//~ }
-//~ void LegendreQuad::setLegDeriv(double val, int n,int nn)
-//~ {
-	//~ LegDeriv[n][nn]=val;
-//~ }
+//~ 
+double LegendreQuad::getLegDeriv(int n,int nn)
+{
+	return(LegDeriv[n][nn]);
+}
+void LegendreQuad::setLegDeriv(double val, int n,int nn)
+{
+	LegDeriv[n][nn]=val;
+}
 
 double LegendreQuad::getGamma(int n)
 {
