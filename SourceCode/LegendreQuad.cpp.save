@@ -105,6 +105,7 @@ void LegendreQuad::PointsAndWeights()
 	//~ for(i=0;i<nSize; i++)
 	//~ {
 		//~ std::cout << E[i] << std::endl;
+LegendreQuad::LegendreQuad(int value)
 	//~ }
 	//~ std::cout << "\n\n";
 //~ 
@@ -158,7 +159,7 @@ void LegendreQuad::PointsAndWeights()
 //***************************************************
 	for(i=0;i<nSize1;i++)
 	{
-		setPoints(-1.0*D[i],i);
+		setCollocation(-1.0*D[i],i);
 		setWeight(2*pow(Z[i][0],2),i);
 		//~ std::cout << getCollocation(i) << "\t " << getWeight(i) << std::endl;
 	}
@@ -175,7 +176,7 @@ void LegendreQuad::LegPolynomials()
 	for(j=0;j<nSize1;j++)
 	{
 		setLegPolys(1.0, 0, j);
-		setLegPolys(getPoints(j), 1, j);
+		setLegPolys(getCollocation(j), 1, j);
 	}
 	// Define the Legendre Polys
 	double tempNum;
@@ -184,23 +185,10 @@ void LegendreQuad::LegPolynomials()
 		ii=(double)i;
 		for(j=0;j<nSize1;j++)
 		{
-			tempNum=((2.0*ii-1.0)/ii)*getPoints(j)*getLegPolys(i-1,j)-((ii-1.0)/ii)*getLegPolys(i-2,j);
+			tempNum=((2.0*ii-1.0)/ii)*getCollocation(j)*getLegPolys(i-1,j)-((ii-1.0)/ii)*getLegPolys(i-2,j);
 			setLegPolys(tempNum,i,j);
 		}
 	}
-	
-	// Print Legendre Polynomials
-	
-	//~ std::cout << "Legendre Polynomials" << std::endl;
-	//~ for(i=0; i<nSize1; i++)
-	//~ {
-		//~ for(j=0; j<nSize1; j++)
-		//~ {
-			//~ std::cout<< getLegPolys(i,j) << "\t" ;
-		//~ }
-		//~ std::cout << std::endl;
-	//~ }
-	//~ std::cout << "\n\n" << std::endl;
 	
 	// Define the normalizing parameters Gamma
 	for(i=0;i<nSize1;i++)
@@ -213,7 +201,7 @@ void LegendreQuad::LegPolynomials()
 	
 }
 
-//~ 
+
 void LegendreQuad::DerivativeMatrix()
 {
 	double dummyVar, ii;
@@ -224,41 +212,64 @@ void LegendreQuad::DerivativeMatrix()
 		setLegDeriv(0.0,0,j);
 		setLegDeriv(1.0,1,j);
 	}
-	// lp(i,:)=((2*(n)-1)*lval(i-1,:)+lp(i-2,:));
 	// define the legendre polynomlial matrix
 	for(i=2; i<nSize1; i++)
 	{
 		for(j=0; j<nSize1; j++)
 		{
-				ii=(double)i;
-				dummyVar=(2.0*ii-1)*getLegPolys(i-1,j)+getLegDeriv(i-2,j);
-				setLegDeriv(dummyVar,i,j);
+			ii=(double)i;
+			dummyVar=-1.0*(2.0*ii-1)*getLegPolys(i-1,j)+getLegDeriv(i-2,j);
+			setLegDeriv(dummyVar,i,j);
 		}
 	}
 	
-//****************************************************
-//				Print derivatives
-//****************************************************
-std::cout << "Derivatives of Legendre Polynomial" << std::endl;
-	for(i=0; i<nSize1; i++)
-	{
-		for(j=0; j<nSize1; j++)
-		{
-			std::cout<< getLegDeriv(i,j) << "\t" ;
-		}
-		std::cout << std::endl;
-	}
-	std::cout<< "\n\n" << std::endl;
-		
 }
 
-double LegendreQuad::getPoints(int n)
+void LegendreQuad::SecondDerivativeMatrix()
+{
+	char tA = 'T';
+	char tB = 'T';
+	int M=nSize1;
+	int N=nSize1;
+	int K=nSize1;
+	int LDA=nSize1;
+	int LDB=nSize1;
+	int LDC=nSize1;
+	
+	double ALPHA = 1.0;
+	double BETA = 0.0;
+	
+	double A[nSize1][nSize1];
+	double C[nSize1][nSize1];
+	
+	int i,j;
+	for(j=0;j<nSize1;j++)
+	{
+		for(i=0;i<nSize1;i++)
+		{
+			A[i][j]=getLegDeriv(i,j);
+
+		}
+	}
+	// call the BLAS function dgemm
+	dgemm_(&tA,&tB,&M,&N,&K,&ALPHA,&A[0][0],&LDA,&A[0][0],&LDB,&BETA,&C[0][0],&LDC);
+	// Will need to transpose C. the output
+	for(i=0;i<nSize1;i++)
+	{
+		for(j=0;j<nSize1;j++)
+		{
+			setLegSecondDeriv(C[i][j],j,i);
+		}
+	}	
+}
+
+double LegendreQuad::getCollocation(int n)
 {
   return(x[n]);
 }
 
 
-void LegendreQuad::setPoints(double val,int n)
+void LegendreQuad::setCollocation(double val,int n)
 {
   x[n] = val;
 }
@@ -279,12 +290,13 @@ double LegendreQuad::getLegPolys(int n,int nn)
 	return(LegPoly[n][nn]);
 }
 
+// setLegPolys(value, row index, column index)
 void LegendreQuad::setLegPolys(double val, int n,int nn)
 {
 	
 	LegPoly[n][nn]=val;
 }
-//~ 
+
 double LegendreQuad::getLegDeriv(int n,int nn)
 {
 	return(LegDeriv[n][nn]);
@@ -292,6 +304,15 @@ double LegendreQuad::getLegDeriv(int n,int nn)
 void LegendreQuad::setLegDeriv(double val, int n,int nn)
 {
 	LegDeriv[n][nn]=val;
+}
+
+double LegendreQuad::getLegSecondDeriv(int n,int nn)
+{
+	return(LegSecondDeriv[n][nn]);
+}
+void LegendreQuad::setLegSecondDeriv(double val, int n,int nn)
+{
+	LegSecondDeriv[n][nn]=val;
 }
 
 double LegendreQuad::getGamma(int n)
