@@ -24,85 +24,8 @@ BuildMassStiffness::~BuildMassStiffness(void)
 }
 
 
-void BuildMassStiffness::buildMass()
-{	
-
-	int i,j;
-	for(i=0;i<nSize1;i++)
-	{
-		setMass(getWeight(i),i,i);
-		//~ std::cout << getWeight(i) << std::endl;
-	}
-	
-	//*******************************************
-	//  Print Mass Matrix 
-	//*******************************************
-	//~ std::cout << "\n The Mass Matrix: " << std::endl;
-	//~ for(i=0;i<nSize1;i++)
-	//~ {
-		//~ for(j=0;j<nSize1;j++)
-		//~ {
-			//~ 
-			//~ std::cout << getMass(i,j) <<"\t";			
-		//~ }
-		//~ std::cout << std::endl;
-	//~ }
-}
-
-void BuildMassStiffness::buildBasis()
+void BuildMassStiffness::buildBasisDerivative()
 {
-	int i,j;
-	double dum,N;
-	N=(double)nSize;
-	for(j=0;j<nSize1;j++)
-	{
-		for(i=0;i<nSize1;i++)
-		{
-			if(i==j)
-			{
-				dum=1.0;
-			}
-			else
-			{
-				//~ dum=-1.0/(N*(N+1.0))*(1.0-getPoints(i)*getPoints(i))
-				//~ /(getPoints(i)-getPoints(j))*getLegDeriv(nSize1,i)
-				//~ /getLegPolys(nSize1,j);
-				dum=(-1.0/(N*(N+1.0))*(1.0-getPoints(i)*getPoints(i))/(getPoints(i)-getPoints(j))*getLegDeriv(nSize1,i))/getLegPolys(nSize1,j);
-			}
-			setBasis(dum,j,i);
-		}
-	}
-	// test the getLegPoly call
-	std::cout << "Legendre Polynomials" << std::endl;
-	for(i=0; i<nSize1; i++)
-	{
-		for(j=0; j<nSize1; j++)
-		{
-			std::cout<< getLegPolys(i,j) << "\t" ;
-		}
-		std::cout << std::endl;
-	}
-	std::cout << "\n\n" << std::endl;
-	
-	// display the basis function matrix
-	//~ std::cout << "\n\n Basis Matrix" std::endl;
-	for(j=0;j<nSize1;j++)
-	{
-		for(i=0;i<nSize1;i++)
-		{
-			std::cout << getBasis(j,i) << "\t";
-		}
-		std::cout << std::endl;
-	}
-	
-	// dum test to see how c++ deals with 0/1;
-	std::cout << "0/1 = " << 0.0/1.0 << "\n\n" << std::endl;
-	
-}
-
-void BuildMassStiffness::buildStiffness()
-{
-	
 //******************************************
 // Define the derivative matrix from 
 // Hesthaven p. 95 for Legendre
@@ -131,59 +54,39 @@ void BuildMassStiffness::buildStiffness()
 
 			if(i!=j)
 			{	
-				//~ dummy=1.0;
 				dummy=(getLegPolys(nSize,i)/getLegPolys(nSize,j))/(getPoints(i)-getPoints(j));
 			}
-			D1[i][j]=dummy;
+			setDerivativeMatrix(dummy,i,j);
 		}
 	}
-	
-	// The send derivative matrix (the stiffness matrix is D_1*D_1)
-	// so we use the BLAS dgemm code to multiply the matrix
-	char tA='n';
-	char tB='n';
-	
-	int M = nSize1;
-	int N = nSize1;
-	int K = nSize1;
-	
-	double a = 1.0;
-	double b=0.0;
-	double D2[nSize1][nSize1];
-	dgemm_(&tA, &tB, &M, &N, &K, &a, &D1[0][0], &nSize1, &D1[0][0], 
-	&nSize1, &b, &D2[0][0], &nSize1); 
-	
-	//*******************************************
-	//  Print Stiffness Matrix 
-	//*******************************************
-	
-	//~ std::cout << "\n The second Derivative Matrix: " << std::endl;
-	//~ for(i=0;i<nSize1;i++)
-	//~ {
-		//~ for(j=0;j<nSize1;j++)
-		//~ {
-			//~ std::cout << D2[i][j] <<"\t";			
-		//~ }
-		//~ std::cout << std::endl;
-	//~ }	
 }
-
-void BuildMassStiffness::setMass(double val,int i, int j)
+void BuildMassStiffness::buildStiffness()
 {
-	M[i][j]=val;
-}
-double BuildMassStiffness::getMass(int i, int j)
-{
-	return(M[i][j]);
-}
-
-void BuildMassStiffness::setBasis(double val,int i,int j)
-{
-	phi[i][j]=val;
-}
-double BuildMassStiffness::getBasis(int i,int j)
-{
-	return(phi[i][j]);
+	int m,n,k;
+	double k_el;
+	for(m=0;m<nSize1;m++)
+	{
+		for(n=0;n<nSize1;n++)
+		{
+			k_el=0;
+			for(k=0;k<nSize1;k++)
+			{
+				k_el=k_el+getDerivativeMatrix(m,k)*getDerivativeMatrix(n,k)*getWeight(k);
+			}
+			setStiffness(k_el,m,n);
+		}
+	}
+	int i,j;
+	std::cout << "Stiffness matrix" << std::endl;
+	for(i=0; i<nSize1; i++)
+	{
+		for(j=0; j<nSize1; j++)
+		{
+			std::cout<< getStiffness(i,j) << "\t" ;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "\n\n" << std::endl;
 }
 
 void BuildMassStiffness::setDerivativeMatrix(double val,int i, int j)

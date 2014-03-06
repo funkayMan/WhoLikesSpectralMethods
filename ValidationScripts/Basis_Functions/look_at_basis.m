@@ -36,7 +36,7 @@ for jj=1:N1
         end
     end
 end
-phi
+
 % plot(x,phi(10,:))
 
 
@@ -58,17 +58,17 @@ for ii = 1:N1
     end
 end
 
-% K_el=zeros(N1);
-% for m=1:N1
-%     for n=1:N1
-%         el=0;
-%         for k=1:N1
-%             el=el+D(n,k)*D(m,k)*w(k);
-%         end
-%         K(m,n)=el;
-%     end
-% end
-% K
+K_el=zeros(N1);
+for m=1:N1
+    for n=1:N1
+        el=0;
+        for k=1:N1
+            el=el+D(n,k)*D(m,k)*w(k);
+        end
+        K(m,n)=el;
+    end
+end
+K
 
 
 % The Assembly

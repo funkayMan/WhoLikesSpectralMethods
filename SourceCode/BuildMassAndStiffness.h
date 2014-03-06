@@ -4,33 +4,29 @@
 
 # include "LegendreQuad.h"
 
+
+// Some notes
+// 1. The basis function matrix is the identity. keep that in mind when
+// it is needed...
+//
+// 2. The Mass matrix the weights on the diagonal, also keep that in mind
 class BuildMassStiffness : protected LegendreQuad
 {
 private:
-	double phi[MATSIZE][MATSIZE];		// Basis Functions
+	//~ double phi[MATSIZE][MATSIZE];		// Basis Functions
 	double D[MATSIZE][MATSIZE]; // Basis Derivatives
 
 protected:
-	double M[MATSIZE][MATSIZE];	// Mass Matrix
 	double K[MATSIZE][MATSIZE];	// Stiffness Matrix	
-	double a;
 	
 public:
 // construct & destruct
 	BuildMassStiffness(int value=0);
 	~BuildMassStiffness();
 	
-	void buildMass();
-	
-	void buildBasis();
+	void buildBasisDerivative();
 	
 	void buildStiffness();
-	
-	void setMass(double val,int i, int j);
-	double getMass(int i, int j);
-	
-	void setBasis(double val,int i,int j);
-	double getBasis(int i,int j);
 	
 	void setDerivativeMatrix(double val,int i, int j);
 	double getDerivativeMatrix(int i, int j);

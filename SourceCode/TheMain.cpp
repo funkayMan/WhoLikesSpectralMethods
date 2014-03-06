@@ -13,7 +13,8 @@ int main(int argc,char **argv)
 	int N=5;
 	
 	BuildMassStiffness dumdum(N);
-	dumdum.buildBasis();
+	dumdum.buildBasisDerivative();
+	dumdum.buildStiffness();
 	//~ dumdum.PointsAndWeights();
 	//~ dumdum.LegPolynomials();
 	//~ dumdum.DerivativeMatrix();
