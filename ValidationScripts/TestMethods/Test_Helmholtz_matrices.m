@@ -1,8 +1,11 @@
-ccc
+clear all
+close all
+clc
+
 global K M
 
-N=20;
-[phi, D, x, w]=GLL_Basis(N);
+N=25;
+[phi, D, x, w,gamma]=GLL_Basis(N);
 N1=N+1;
 M=zeros(N1);
 K=M;
@@ -10,26 +13,30 @@ for i = 1:N1
     M(i,i)=w(i);
     for j = 1:N1
         for k=1:N1
-            K(i,j)=K(i,j)+D(i,k)*D(j,k);
+            K(i,j)=K(i,j)-D(i,k)*D(j,k);
         end
     end
 end
-
+% set u on the ends to zero...
+K(1,:)=0;
+K(N1,:)=0;
+K(1,1)=1;
+K(N1,N1)=1;
 u(:,1)=sin(pi*x);
 
 
 
-T=0.1;
+T=0.2;
 dt=0.0001;
 t=0:dt:T;
 n=length(t);
-for i = 1:2
+for i = 1:n
     plot(x,u(:,i));
-    k1=RHS(u(:,i));
-    k2=RHS(u(:,i)+dt/2*k1);
-    k3=RHS(u(:,i)+dt/2*k2);
-    k4=RHS(u(:,i)+dt*k3);
-    u(:,i+1)=u(:,i)+dt/6*(k1+2*k2+2*k3+k4);
+    ylim([-1 1])
+    %
+    u(:,i+1) = (M-dt/2*K)\(M+dt/2*K)*u(:,i);
+    %
+    pause(0.01)
 end
     
 

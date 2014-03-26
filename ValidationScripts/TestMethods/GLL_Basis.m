@@ -1,4 +1,4 @@
-function [phi, D, x, w]=GLL_Basis(N)
+function [phi, D, x, w,gamma]=GLL_Basis(N)
 [N1,lval,x,w,gamma] = leg_quad(N);
 % define derivative of polynomials
 lp(1,:)=zeros(size(lval(1,:)));
