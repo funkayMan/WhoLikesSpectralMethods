@@ -239,16 +239,16 @@ void LegendreQuad::DerivativeMatrix()
 //****************************************************
 //				Print derivatives
 //****************************************************
-std::cout << "Derivatives of Legendre Polynomial" << std::endl;
-	for(i=0; i<nSize1; i++)
-	{
-		for(j=0; j<nSize1; j++)
-		{
-			std::cout<< getLegDeriv(i,j) << "\t" ;
-		}
-		std::cout << std::endl;
-	}
-	std::cout<< "\n\n" << std::endl;
+//~ std::cout << "Derivatives of Legendre Polynomial" << std::endl;
+	//~ for(i=0; i<nSize1; i++)
+	//~ {
+		//~ for(j=0; j<nSize1; j++)
+		//~ {
+			//~ std::cout<< getLegDeriv(i,j) << "\t" ;
+		//~ }
+		//~ std::cout << std::endl;
+	//~ }
+	//~ std::cout<< "\n\n" << std::endl;
 		
 }
 

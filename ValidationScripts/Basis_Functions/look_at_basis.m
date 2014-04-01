@@ -1,86 +1,75 @@
 ccc
 
 N=5;
-[N1,lval,x,w,gamma] = leg_quad(N);
-% define derivative of polynomials
-lp(1,:)=zeros(size(lval(1,:)));
-lp(2,:)=ones(size(lp(1,:)));
-for i = 3:N1
-    n=i-1;
-    lp(i,:)=((2*(n)-1)*lval(i-1,:)+lp(i-2,:));
-end
-% lval
-% lp
-% NN=10
-% 
-% lval(NN,:)
-% lp(NN,:)
-% 
-% plot(x,lval(NN,:),'g','LineWidth',3);
-% hold on
-% % plot(diff(lval(NN,:))./diff(x'),'r');
-% % hold on
-% plot(x,lp(NN,:),'LineWidth',3)
-% grid on
 
 
-% Define Basis
-for jj=1:N1
-    j=jj-1;
-    for ii=1:N1
-        i=ii-1;
-        if i==j;
-            phi(jj,ii)=1.0;
-        else
-            phi(jj,ii)=(-1/(N*(N+1)))*(1-x(ii)^2)/(x(ii)-x(jj))*lp(end,ii)/lval(end,jj);
-        end
-    end
-end
-phi
-% plot(x,phi(10,:))
 
 
-D=zeros(N1);
-for ii = 1:N1
-    i=ii-1;
-    for jj = 1:N1
-        j=jj-1;
-        if i==j && i==0
-            dum=N*(N+1)/4;
-        elseif i==j && i>0 && i < N
-            dum=0.0;
-        elseif i~=j
-            dum=lval(end,ii)/(lval(end,jj)*(x(ii)-x(jj)));
-        elseif i==j && i==N
-            dum=-N*(N+1)/4;
-        end
-        D(ii,jj)=dum;
-    end
-end
+
 
 % K_el=zeros(N1);
 % for m=1:N1
+%     M_el(m,m)=w(m);
 %     for n=1:N1
 %         el=0;
 %         for k=1:N1
 %             el=el+D(n,k)*D(m,k)*w(k);
 %         end
-%         K(m,n)=el;
+%         K_el(m,n)=el;
 %     end
 % end
-% K
-
-
-% The Assembly
-% Nel=2;
+% 
+% % The Assembly
+% Nel=3;
 % K=zeros((Nel)*(ii)-Nel+1);
 % for j = 1:Nel
 %     for m=1:ii;
-%         row=(ii-1)*(j-1)+m
+%         row=(ii-1)*(j-1)+m;
 %         for n = 1:ii;
 %             col=(ii-1)*(j-1)+n;
-%             K(row,col)=D(m,n)+K(row,col);
+%             K(row,col)=K_el(m,n)+K(row,col);
 %         end
 %     end
 % end
-% K
+% 
+% 
+% loc=zeros(length(K),1);
+% M=zeros(size(K));
+% for j = 1:Nel
+%     for ind = 1:N1
+%         i=ind+N1*(j-1)-1*(j-1);
+%         i_old=N1*(j-1)-j+2;
+%         if j==1
+%             loc(i)=-x(ind)+1;
+%             M(i,i)=w(ind);
+%         else
+%             M(i,i)=w(ind);
+%             loc(ind+N1*(j-1)-1*(j-1))=-x(ind)+1+loc(i_old);
+%         end            
+%     end
+% end
+% 
+% 
+% 
+% 
+% u=zeros(size(x));
+% u(3)=1;
+% % a = 
+% % for i = 1:N1;
+% % 
+% A=M_el\K_el;
+% T=0.02;
+% dt=0.001;
+% t=0:dt:T;
+% 
+% figure
+% NNN=length(t);
+% for i=1:NNN
+%     clf
+%     plot(x,u(:,i),'LineWidth',2)
+%     u(:,i+1)=u(:,i)+dt*A*u(:,i);
+%     u(1,end)=0;
+%     u(1,1)=0;
+%     pause(0.1)
+% end
+    
