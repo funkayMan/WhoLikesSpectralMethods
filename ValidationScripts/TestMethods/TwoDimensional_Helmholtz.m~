@@ -1,6 +1,7 @@
-ccc
+clear
+clf
 
-Nx=3;
+Nx=5;
 Ny=Nx;
 N=Nx;
 N1=N+1;
@@ -29,46 +30,65 @@ for i = 1:N1
 end
 M=M*J;
 
-%% Stiffness Matrix
+%% Allocate space for the Stiffness Matrix and then calculate that
+%% bad boy.
 K_x=zeros((N+1)^2);
+
+
 %% the xi part
 for m = 1:N1
-    for i = 1:N1    
-        for n = 1:N1
-            rInd=(m-1)*N1+n;
+    for n = 1:N1
+        rInd=(m-1)*N1+n;
+        for i = 1:N1
             cInd=(m-1)*N1+i;
+            tmp = 0.0;
             for l = 1:N1
-                K_x(rInd,cInd)=K_x(rInd,cInd)+D_xi(i,l)*D_xi(i,l)*w(l)*w(n);
-                %             end
+                tmp = tmp + D_xi(i,l)*D_xi(m,l)*w(l);
             end
+            K_x(rInd,cInd) = -tmp*w(n)*(2.0/(a-b))*((c-d)/2.0);
+%             spy(K_x)
+%             pause(0.01)
+            
         end
     end
 end
-K_x=(2/(a-b))^2*K_x;
+
+break
+
 %% the eta part
 K_e=zeros(N1*N1);
 for m = 1:N1
-    for j = 1:N1    
-        for n = 1:N1
-            rInd=(m-1)*N1+n;
-            cInd=n+(j-1)*N1;
-            for k = 1:N1                
-                K_e(rInd,cInd)=K_e(rInd,cInd)+D_xi(j,k)*D_xi(n,k)*w(m)*w(k);
+    for n = 1:N1
+        rInd=(n-1)*N1+m;
+        for j = 1:N1
+            cInd=(j-1)*N1+m;
+            tmp = 0.0;
+            for k = 1:N1
+                tmp = tmp + D_xi(j,k)*D_xi(k,n)*w(k);
             end
+            K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
+            spy(K_e)
+            pause(0.01)
         end
     end
 end
-K_e=(2/(c-d))^2*K_e;
-K=-1*(K_e+K_x)*J;
 
-spy(K,'L4)
+
+%% Form the matrix, take a peek, and see if it is a solution to our system
+K=(K_e+K_x);
+
+spy(K,30,'k')
 %% Test K
+u = zeros(N1*N1,1);
 for i = 1:N1
     for j = 1:N1
-        u((i-1)*N1+j,1)=f(i,j);
+        u((i-1)*N1+j)=f(i,j);
     end
 end
-norm(K*u-u)
+norm(K*u+2.0*u)
+plot(K*u)
+hold on
+plot(-2*u,'r')
 
 break
 %% Add boundary conditions to K
