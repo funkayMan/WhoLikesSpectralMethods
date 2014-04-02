@@ -2,11 +2,7 @@
 clf
 clear
 
-<<<<<<< HEAD
 Nx=20;
-=======
-Nx=10;
->>>>>>> origin/funkay_dev
 Ny=Nx;
 N=Nx;
 N1=N+1;
@@ -44,19 +40,11 @@ K_x=zeros((N+1)^2);
 for m = 1:N1
     for n = 1:N1
         rInd=(n-1)*N1+m;
-<<<<<<< HEAD
         for i = 1:N1
             cInd=(n-1)*N1+i;
             tmp = 0.0;
             for l = 1:N1
                 tmp = tmp + D_xi(l,i)*D_xi(l,m)*w(l);
-=======
-        for i = 1:N1    
-            cInd=(n-1)*N1+i;
-            tmp = 0.0;
-            for l = 1:N1
-                tmp  = tmp + D_xi(l,i)*D_xi(l,m)*w(l);
->>>>>>> origin/funkay_dev
             end
             K_x(rInd,cInd) = -tmp*w(n)*(2.0/(a-b))*((c-d)/2.0);
         end
@@ -69,17 +57,10 @@ K_e=zeros(N1*N1);
 for m = 1:N1
     for n = 1:N1
         rInd=(n-1)*N1+m;
-<<<<<<< HEAD
         for j = 1:N1
             cInd=m+(j-1)*N1;
             tmp = 0.0;
             for k = 1:N1
-=======
-        for j = 1:N1    
-            cInd=m+(j-1)*N1;
-            tmp = 0.0;
-            for k = 1:N1                
->>>>>>> origin/funkay_dev
                 tmp = tmp + D_xi(k,j)*D_xi(k,n)*w(k);
             end
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
@@ -99,15 +80,11 @@ for i = 1:N1
         u((i-1)*N1+j)=f(i,j);
     end
 end
-<<<<<<< HEAD
 norm(K*u+2.0*M*u)
 plot(K*u,'bo-','LineWidth',2)
 hold on
 plot(-2*M*u,'rs-')
 legend('stiffness','notstiffness')
-=======
-norm(K*u+2.0*u)
->>>>>>> origin/funkay_dev
 
 break
 %% Add boundary conditions to K
