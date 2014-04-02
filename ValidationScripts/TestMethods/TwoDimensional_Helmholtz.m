@@ -42,12 +42,13 @@ end
 
 %% Mass Matrix
 M=zeros(N1*N1);
-for i = 1:N1
-    for j = 1:N1
-        M((i-1)*N1+j,(i-1)*N1+j)=w(j)*w(i);
+for m = 1:N1
+    for n = 1:N1
+        M((n-1)*N1+m,(n-1)*N1+m)=w(m)*w(n)
     end
 end
 M=M*J;
+% M=eye(N1*N1)*J
 
 %% Allocate space for the Stiffness Matrix and then calculate that
 %% bad boy.
@@ -83,8 +84,6 @@ for m = 1:N1
                 tmp = tmp + D_eta(k,j)*D_eta(k,n)*w(k);
             end
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
-     
-
         end
     end
 end
