@@ -1,8 +1,11 @@
 %ccc
-clf
+% clf
 clear
+clc
+clf
+warning off all
 
-Nx=20;
+Nx=3;
 Ny=Nx;
 N=Nx;
 N1=N+1;
@@ -19,13 +22,28 @@ y=(c-d)*(eta-1)/2+c;
 J=(a-b)*(c-d)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
-f=sin(xx).*sin(yy);
+f=xx.^2.*yy.^2;
 % surfc(xx,yy,f);
+u = zeros(N1*N1,1);
+for i = 1:N1
+    for j = 1:N1
+        u((i-1)*N1+j)=f(i,j);
+    end
+end
+dF=2.*xx.^2;
+d2u = zeros(N1*N1,1);
+for i = 1:N1
+    for j = 1:N1
+        d2u((i-1)*N1+j)=dF(i,j);
+    end
+end
+
+
 
 %% Mass Matrix
-M=zeros(N1);
-for j = 1:N1
-    for i = 1:N1
+M=zeros(N1*N1);
+for i = 1:N1
+    for j = 1:N1
         M((i-1)*N1+j,(i-1)*N1+j)=w(j)*w(i);
     end
 end
@@ -56,35 +74,40 @@ end
 K_e=zeros(N1*N1);
 for m = 1:N1
     for n = 1:N1
-        rInd=(n-1)*N1+m;
+        
         for j = 1:N1
-            cInd=m+(j-1)*N1;
+            rInd=(n-1)*N1+m;
+            cInd=(j-1)*N1+m;
             tmp = 0.0;
             for k = 1:N1
-                tmp = tmp + D_xi(k,j)*D_xi(k,n)*w(k);
+                tmp = tmp + D_eta(k,j)*D_eta(k,n)*w(k);
             end
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
+     
+
         end
     end
 end
-
+subplot(2,1,1)
+spy(K_e)
+% pause(0.001)
 
 %% Form the matrix, take a peek, and see if it is a solution to our system
-K=(K_e+K_x);
+K=(K_e);
 
-spy(K,30,'k')
+% spy(K,30,'k')
 %% Test K
-u = zeros(N1*N1,1);
-for i = 1:N1
-    for j = 1:N1
-        u((i-1)*N1+j)=f(i,j);
-    end
-end
-norm(K*u+2.0*M*u)
-plot(K*u,'bo-','LineWidth',2)
+rhs=M\K*u;
+err=norm(rhs+d2u,2);
+fprintf('The Error is %6.4f\n',err)
+subplot(2,1,2)
+plot(rhs,'bo-','LineWidth',2)
 hold on
-plot(-2*M*u,'rs-')
-legend('stiffness','notstiffness')
+% Define an analytic derivative
+
+plot(d2u,'rs-','LineWidth',2)
+H=legend('M\K*u','Analytic Soln');
+set(H,'Location','SouthWest');
 
 break
 %% Add boundary conditions to K
