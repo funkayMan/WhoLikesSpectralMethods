@@ -2,7 +2,7 @@
 clf
 clear
 
-Nx=10;
+Nx=20;
 Ny=Nx;
 N=Nx;
 N1=N+1;
@@ -17,15 +17,15 @@ c=0; d=pi;
 x=(a-b)*(xi-1)/2+a;
 y=(c-d)*(eta-1)/2+c;
 J=(a-b)*(c-d)/4;
-%
+%(i
 [xx,yy]=meshgrid(x,y);
 f=sin(xx).*sin(yy);
 % surfc(xx,yy,f);
 
 %% Mass Matrix
 M=zeros(N1);
-for i = 1:N1
-    for j = 1:N1
+for j = 1:N1
+    for i = 1:N1
         M((i-1)*N1+j,(i-1)*N1+j)=w(j)*w(i);
     end
 end
@@ -81,9 +81,9 @@ for i = 1:N1
     end
 end
 norm(K*u+2.0*M*u)
-plot(K*u)
+plot(K*u,'bo-','LineWidth',2)
 hold on
-plot(-2*M*u,'rs')
+plot(-2*M*u,'rs-')
 legend('stiffness','notstiffness')
 
 break
