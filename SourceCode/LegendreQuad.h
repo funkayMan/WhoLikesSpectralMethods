@@ -11,10 +11,10 @@ class LegendreQuad{
 
 public:
 
-double w[MATSIZE];	// Weights
-double G[MATSIZE];	// The normalizing parameters
-double LegPoly[MATSIZE][MATSIZE];	//Leg polynomial matrix
-double LegDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
+  double w[MATSIZE];	// Weights
+  double G[MATSIZE];	// The normalizing parameters
+  double LegPoly[MATSIZE][MATSIZE];	//Leg polynomial matrix
+  double LegDeriv[MATSIZE][MATSIZE];	//Leg Poly Deriv Matrix
 
 
 
