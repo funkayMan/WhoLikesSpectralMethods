@@ -1,7 +1,8 @@
-clear
+%ccc
 clf
+clear
 
-Nx=15;
+Nx=10;
 Ny=Nx;
 N=Nx;
 N1=N+1;
@@ -25,7 +26,7 @@ f=sin(xx).*sin(yy);
 M=zeros(N1);
 for i = 1:N1
     for j = 1:N1
-        M((i-1)*N1+j,(i-1)*N1+j)=w(i)*w(i);
+        M((i-1)*N1+j,(i-1)*N1+j)=w(j)*w(i);
     end
 end
 M=M*J;
@@ -38,44 +39,38 @@ K_x=zeros((N+1)^2);
 %% the xi part
 for m = 1:N1
     for n = 1:N1
-        rInd=(m-1)*N1+n;
+        rInd=(n-1)*N1+m;
         for i = 1:N1
-            cInd=(m-1)*N1+i;
+            cInd=(n-1)*N1+i;
             tmp = 0.0;
             for l = 1:N1
                 tmp = tmp + D_xi(l,i)*D_xi(l,m)*w(l);
             end
             K_x(rInd,cInd) = -tmp*w(n)*(2.0/(a-b))*((c-d)/2.0);
-%             spy(K_x)
-%             pause(0.01)
-            
         end
     end
 end
 
-% break
 
 %% the eta part
-% K_e=zeros(N1*N1);
-% for m = 1:N1
-%     for n = 1:N1
-%         rInd=(m-1)*N1+n;
-%         for j = 1:N1
-%             cInd=(j-1)*N1+n;
-%             tmp = 0.0;
-%             for k = 1:N1
-%                 tmp = tmp + D_xi(j,k)*D_xi(k,n)*w(k);
-%             end
-%             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
-% %             spy(K_e)
-% %             pause(0.01)
-%         end
-%     end
-% end
+K_e=zeros(N1*N1);
+for m = 1:N1
+    for n = 1:N1
+        rInd=(n-1)*N1+m;
+        for j = 1:N1
+            cInd=m+(j-1)*N1;
+            tmp = 0.0;
+            for k = 1:N1
+                tmp = tmp + D_xi(k,j)*D_xi(k,n)*w(k);
+            end
+            K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
+        end
+    end
+end
 
 
 %% Form the matrix, take a peek, and see if it is a solution to our system
-K=(K_x);
+K=(K_e+K_x);
 
 spy(K,30,'k')
 %% Test K
@@ -85,10 +80,11 @@ for i = 1:N1
         u((i-1)*N1+j)=f(i,j);
     end
 end
-norm(K*u+u)
+norm(K*u+2.0*M*u)
 plot(K*u)
 hold on
-plot(-u,'r')
+plot(-2*M*u,'rs')
+legend('stiffness','notstiffness')
 
 break
 %% Add boundary conditions to K
