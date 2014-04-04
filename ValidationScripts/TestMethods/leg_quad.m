@@ -1,6 +1,6 @@
 function [N1,lval,xl,w,gamma] = leg_quad(N)
 
-
+% N=10;
 % Function to return the Gauss-Lobotto quadrature for the
 % Legendre polynomials.
 %

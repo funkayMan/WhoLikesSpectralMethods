@@ -4,7 +4,7 @@ clc
 
 global K M
 
-N=25;
+N=3;
 [phi, D, x, w,gamma]=GLL_Basis(N);
 N1=N+1;
 M=zeros(N1);

@@ -1,4 +1,5 @@
-function [phi, D, x, w,gamma]=GLL_Basis(N)
+function [phi, D, x, w,gamma,lval]=GLL_Basis(N)
+% N=5
 [N1,lval,x,w,gamma] = leg_quad(N);
 % define derivative of polynomials
 lp(1,:)=zeros(size(lval(1,:)));
@@ -20,7 +21,7 @@ end
 % % hold on
 % plot(x,lp(NN,:),'LineWidth',3)
 % grid on
-
+x=-x;
 
 % Define Basis
 for jj=1:N1
@@ -30,7 +31,7 @@ for jj=1:N1
         if i==j;
             phi(jj,ii)=1.0;
         else
-            phi(jj,ii)=(-1/(N*(N+1)))*(1-x(ii)^2)/(x(ii)-x(jj))*lp(end,ii)/lval(end,jj);
+            phi(jj,ii)=(-1/(N*(N+1)))*(1-x(ii)^2)/(x(ii)-x(jj))*lp(N1,ii)/lval(N1,jj);
         end
     end
 end
@@ -40,18 +41,14 @@ end
 
 D=zeros(N1);
 for ii = 1:N1
-    i=ii-1;
     for jj = 1:N1
-        j=jj-1;
-        if i==j && i==0
-            dum=N*(N+1)/4;
-        elseif i==j && i>0 && i < N
-            dum=0.0;
-        elseif i~=j
-            dum=lval(end,ii)/(lval(end,jj)*(x(ii)-x(jj)));
-        elseif i==j && i==N
-            dum=-N*(N+1)/4;
-        end
-        D(ii,jj)=dum;
+        D(ii,jj)=lval(N1,ii)/lval(N1,jj)/(x(ii)-x(jj));
     end
 end
+
+for i = 1:N1
+    D(i,i)=0;
+end
+D(1,1)=-N*(N+1)/4;
+D(N1,N1)=-D(1,1);
+% D(:,N1)=D(:,N1);

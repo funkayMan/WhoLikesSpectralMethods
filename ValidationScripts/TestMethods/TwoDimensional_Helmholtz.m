@@ -44,7 +44,7 @@ end
 M=zeros(N1*N1);
 for m = 1:N1
     for n = 1:N1
-        M((n-1)*N1+m,(n-1)*N1+m)=w(m)*w(n)
+        M((n-1)*N1+m,(n-1)*N1+m)=w(m)*w(n);
     end
 end
 M=M*J;
@@ -100,7 +100,7 @@ rhs=M\K*u;
 err=norm(rhs+d2u,2);
 fprintf('The Error is %6.4f\n',err)
 subplot(2,1,2)
-plot(rhs,'bo-','LineWidth',2)
+plot(rhs,'bo-','LineWidth',4)
 hold on
 % Define an analytic derivative
 
