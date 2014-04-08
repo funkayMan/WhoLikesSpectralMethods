@@ -20,7 +20,7 @@ y=(d-c)*(x+1)/2+c;
 J=(b-a)*(d-c)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
-f=ones(N1);
+f=xx;
 % surfc(xx,yy,f);
 u = zeros(N1*N1,1);
 for i = 1:N1
@@ -28,7 +28,7 @@ for i = 1:N1
         u((i-1)*N1+j)=f(i,j);
     end
 end
-dF=zeros(N1);
+dF=ones(N1);
 d2u = zeros(N1*N1,1);
 for i = 1:N1
     for j = 1:N1
@@ -59,10 +59,7 @@ for m = 1:N1
         rInd=(n-1)*N1+m;
         for i = 1:N1
             cInd=(n-1)*N1+i;
-            tmp = 0.0;
-            for l = 1:N1
-                tmp = tmp + D(i,l)*D(m,l)*w(l);
-            end
+            tmp = D(:,i)'*(D(:,m).*w);
             K_x(rInd,cInd) = -tmp*w(n)*(2.0/(a-b))*((c-d)/2.0);
         end
     end
@@ -72,22 +69,18 @@ end
 %% the eta part
 K_e=zeros(N1*N1);
 for m = 1:N1
-    for n = 1:N1
-        
+    for n = 1:N1        
         for j = 1:N1
             rInd=(n-1)*N1+m;
             cInd=(j-1)*N1+m;
-            tmp = D(j,:)*(D(n,:)'.*w);
+            tmp = D(:,j)'*(D(:,n).*w);
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
         end
     end
 end
 % subplot(2,1,1)
-spy(K_e)
-pause
-
 %% Form the matrix, take a peek, and see if it is a solution to our system
-K=(K_e);
+K=(K_e+K_x);
 
 % spy(K,30,'k')
 %% Test K
