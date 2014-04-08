@@ -2,22 +2,24 @@
 % clf
 clear
 clc
-close
+clf
 warning off all
 
-N=5;
+Nx=3;
+Ny=Nx;
+N=Nx;
 N1=N+1;
 
-[phi, D, x, w,gamma]=GLL_Basis(N);
+[phi_xi, D_xi, xi, w,gamma_xi]=GLL_Basis(Nx);
 
-% [phi_eta, D_eta, eta, w,gamma_eta]=GLL_Basis(Ny);
+[phi_eta, D_eta, eta, w,gamma_eta]=GLL_Basis(Ny);
 
 a=-1; b=1;
 c=-1; d=1;
 
-x=(b-a)*(x+1)/2+a;
-y=(d-c)*(x+1)/2+c;
-J=(b-a)*(d-c)/4;
+x=(a-b)*(xi-1)/2+a;
+y=(c-d)*(eta-1)/2+c;
+J=(a-b)*(c-d)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
 f=ones(N1);
@@ -61,7 +63,7 @@ for m = 1:N1
             cInd=(n-1)*N1+i;
             tmp = 0.0;
             for l = 1:N1
-                tmp = tmp + D(i,l)*D(m,l)*w(l);
+                tmp = tmp + D_xi(i,l)*D_xi(m,l)*w(l);
             end
             K_x(rInd,cInd) = -tmp*w(n)*(2.0/(a-b))*((c-d)/2.0);
         end
@@ -77,14 +79,17 @@ for m = 1:N1
         for j = 1:N1
             rInd=(n-1)*N1+m;
             cInd=(j-1)*N1+m;
-            tmp = D(j,:)*(D(n,:)'.*w);
+            tmp = 0.0;
+            for k = 1:N1
+                tmp = tmp + D_eta(j,k)*D_eta(n,k)*w(k);
+            end
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(c-d))*((a-b)/2.0);
         end
     end
 end
-% subplot(2,1,1)
+subplot(2,1,1)
 spy(K_e)
-pause
+% pause(0.001)
 
 %% Form the matrix, take a peek, and see if it is a solution to our system
 K=(K_e);
@@ -95,19 +100,14 @@ rhs=K*u;
 lhs=M\d2u;
 err=norm(rhs+lhs,2);
 fprintf('The Error is %6.4f\n',err)
-surfc(xx,yy,reshape(rhs-lhs,[N1 N1]))
-xlabel('x')
-ylabel('y')
-% subplot(2,1,1)
-% plot(rhs,'bo-','LineWidth',4)
-% hold on
-% % Define an analytic derivative
-% 
-% plot(lhs,'rs-','LineWidth',2)
-% H=legend('M\K*u','Analytic Soln');
-% set(H,'Location','SouthWest');
+subplot(2,1,2)
+plot(rhs,'bo-','LineWidth',4)
+hold on
+% Define an analytic derivative
 
-% subplot(2,1,2)
+plot(lhs,'rs-','LineWidth',2)
+H=legend('M\K*u','Analytic Soln');
+set(H,'Location','SouthWest');
 
 
 

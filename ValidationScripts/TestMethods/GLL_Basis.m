@@ -21,7 +21,7 @@ end
 % % hold on
 % plot(x,lp(NN,:),'LineWidth',3)
 % grid on
-x=-x;
+% x=-x;
 
 % Define Basis
 for jj=1:N1
