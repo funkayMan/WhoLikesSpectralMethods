@@ -4,7 +4,7 @@ clc
 
 warning off all
 
-N=10;
+N=20;
 N1=N+1;
 
 [phi, D, x, w,gamma]=GLL_Basis(N);
@@ -19,19 +19,21 @@ y=(d-c)*(x+1)/2+c;
 J=(b-a)*(d-c)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
-f=(-xx.^2+1).*(-yy.^2+1);
+% f=ones(N1);
+f=sin(pi*xx).*sin(pi*yy);
+% f=(-xx .^2+1).*(-yy.^2-1);
 % surfc(xx,yy,f)
+% pause
 % break
 u = zeros(N1*N1,1);
+
+
 
 for i = 1:N1
     for j = 1:N1
         u((i-1)*N1+j)=f(i,j);
     end
 end
-
-
-
 
 %% Mass Matrix
 M=zeros(N1*N1);
@@ -41,7 +43,6 @@ for m = 1:N1
     end
 end
 M=M*J;
-% M=eye(N1*N1)*J
 
 %% Allocate space for the Stiffness Matrix and then calculate that
 %% bad boy.
@@ -52,9 +53,9 @@ K_x=zeros((N+1)^2);
 for m = 1:N1
     for n = 1:N1
         for i = 1:N1
-            rInd=(m-1)*N1+i;
-            cInd=(m-1)*N1+;
-            tmp = D(i,:)*(D(m,:).*w')';
+            rInd=(n-1)*N1+i;
+            cInd=(n-1)*N1+m;
+            tmp = D(:,i)'*(D(:,m).*w);
             K_x(rInd,cInd) = -tmp*w(n)*(2.0/(b-a))*((d-c)/2.0);
         end
     end
@@ -68,9 +69,9 @@ K_e=zeros(N1*N1);
 for m = 1:N1
     for n = 1:N1       
         for j = 1:N1
-            rInd=(n-1)*N1+j;
-            cInd=(m-1)*N1+j;
-            tmp = D(j,:)*(D(n,:).*w')';
+            rInd=(m-1)*N1+j;
+            cInd=(n-1)*N1+j;
+            tmp = D(:,j)'*(D(:,n).*w);
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(b-a))*((d-c)/2.0);
         end
     end
@@ -80,7 +81,10 @@ end
 % break
 % subplot(2,1,1)
 %% Form the matrix, take a peek, and see if it is a solution to our system
+% sum(K_e')
 K=(K_e+K_x);
+% spy(K)
+% sum(K')
 % break
 % spy(K,30,'k')
 %% Test K
@@ -88,7 +92,7 @@ K=(K_e+K_x);
 % lhs=M*d2u;
 % err=norm(rhs+lhs,2);
 % fprintf('The Error is %6.4f\n',err)
-% surfc(xx,yy,reshape(rhs-lhs,[N1 N1]))
+% surfc(xx,yy,reshape
 % xlabel('x')
 % ylabel('y')
 % subplot(2,1,1)
@@ -131,8 +135,8 @@ K=(K_e+K_x);
 % spy(K,'k.',50)
 % break
 %% Time integration
-T=0.2;
-dt=0.001;
+T=3;
+dt=0.01;
 t=0:dt:T;
 n=length(t);
 u_iterat=zeros(N1*N1,n);
@@ -149,9 +153,10 @@ fprintf('Time elapsed for time integration : %6.5f',toc);
 % plot them
 for i = 1:n
     surfc(xx,yy,reshape(u_iterat(:,i),[N1 N1]));
+%     zlim([0 1])
     xlabel('x');
     ylabel('y');
     zlabel('z');
-    text(pi/2,pi,1,['t = ' num2str(dt*i)]);
-    pause(0.01)
+    title(['t = ' num2str(dt*i)]);
+    pause(0.001)
 end
