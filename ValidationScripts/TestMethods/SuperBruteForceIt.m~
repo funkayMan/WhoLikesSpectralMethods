@@ -11,20 +11,22 @@ for m = 1:N1
         M((n-1)*N1+m,(n-1)*N1+m)=w(m)*w(n);
     end
 end
-
+P=zeros(N1*N1);
+K=P;
 for m = 1:N1
     for n = 1:N1
         i1=(m-1)*N1+n;
-        for i = 1:N1
-            for j = 1:N1
-                i2=(i-1)*N1+j;
+        for j = 1:N1
+            for k = 1:N1
+                i2=(j-1)*N1+k;
                 for xi = 1:N1
                     for eta = 1:N1
+                        P(i1,i2)=P(i1,i2)+1;
 % %                         tmp=(phi(j,eta)*D(i,xi)+phi(i,xi)*D(j,eta))*(phi(m,xi)*D(n,eta)+phi(n,eta)*D(m,xi))+...
 % %                             (phi(i,xi)*D(j,eta)+phi(j,eta)*D(i,xi))*(phi(m,xi)*D(n,eta)+phi(n,eta)*D(m,xi));
 
-                          tmp
-                        K(i1,i2)=-tmp*w(xi)*w(eta);
+                        tmp =phi(m,eta)*D(n,xi)*phi(k,eta)*D(j,xi)+phi(n,xi)*D(m,eta)*phi(j,xi)*D(k,eta);
+                        K(i1,i2)=-tmp*w(xi)*w(eta)+K(i1,i2);
                     end
                 end
             end
@@ -76,8 +78,8 @@ end
 % surf
 
 %% Time integration
-T=5;
-dt=0.01;
+T=0.2;
+dt=0.00001;
 t=0:dt:T;
 n=length(t);
 u_iterat=zeros(N1*N1,n);
@@ -93,7 +95,7 @@ fprintf('Time elapsed for time integration : %6.5f',toc);
 % Build u back into f for each timestep
 % plot them
 %% Plot it.
-for i = 1:floor(n/5):n
+for i = 1:n
     surfc(xx,yy,reshape(u_iterat(:,i),[N1 N1]));
 %     zlim([0 1])
     xlabel('x');
