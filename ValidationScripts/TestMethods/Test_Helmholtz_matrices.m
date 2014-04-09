@@ -4,7 +4,7 @@ clc
 
 global K M
 
-N=3;
+N=10;
 [phi, D, x, w,gamma]=GLL_Basis(N);
 N1=N+1;
 M=zeros(N1);
@@ -26,8 +26,8 @@ u(:,1)=sin(pi*x);
 
 
 
-T=0.2;
-dt=0.0001;
+T=2;
+dt=0.001;
 t=0:dt:T;
 n=length(t);
 for i = 1:n
