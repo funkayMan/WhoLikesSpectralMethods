@@ -20,10 +20,10 @@ J=(b-a)*(d-c)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
 % f=ones(N1);
-f=sin(pi*xx).*sin(pi*yy);
+f=0.2*sin(pi/2*(xx-1)).*sin(pi/2*(yy-1));
 % f=(-xx .^2+1).*(-yy.^2-1);
-surfc(xx,yy,f)
-pause
+% surfc(xx,yy,f)
+% pause
 % break
 u = zeros(N1*N1,1);
 
@@ -31,10 +31,14 @@ u = zeros(N1*N1,1);
 
 for i = 1:N1
     for j = 1:N1
-        u((i-1)*N1+j)=f(i,j);
+        u((j-1)*N1+i)=f(j,i);
     end
 end
-
+% subplot(2,1,1)
+% surfc(xx,yy,f);
+% subplot(2,1,2)
+% surfc(xx,yy,reshape(u,[N1 N1]))
+% break
 %% Mass Matrix
 M=zeros(N1*N1);
 for m = 1:N1
@@ -110,33 +114,23 @@ K=(K_e+K_x);
 
 % break
 %% Add boundary conditions to K
-% K=ones(N1*N1);
-% K(1:N1,:)=0;
-% K(N1*(N1-1)+1:N1*N1,:)=0;
-% K(1:N1,1:N1)=eye(N1);
-% K(N1*(N1-1)+1:N1*N1,N1*(N1-1)+1:N1*N1)=eye(N1);
-% 
-% for row=2:N
-%     for col=1:N1
-%         if row == col
-%             K((row-1)*N1+1,((col-1)*N1+1):((col-1)*N1+N1))=0;
-%             K((row-1)*N1+1,(col-1)*N1+1)=1;
-%             K((row-1)*N1+N1,((col-1)*N1+1):((col-1)*N1+N1))=0;
-%             K((row-1)*N1+N1,(col-1)*N1+N1)=1;
-%         else
-%             K((row-1)*N1+1,(col-1)*N1+1)=0;
-%             K((row-1)*N1+1,(col-1)*N1+N1)=0;
-%             K((row-1)*N1+N1,(col-1)*N1+1)=0;
-%             K((row-1)*N1+N1,(col-1)*N1+N1)=0;
-%         end
-%     end
-% end
-%
+K(1:N1,:)=0;
+K(N1*(N1-1)+1:N1*N1,:)=0;
+K(1:N1,1:N1)=eye(N1);
+K(N1*(N1-1)+1:N1*N1,N1*(N1-1)+1:N1*N1)=eye(N1);
+
+for row=2:N
+    K((row-1)*N1+1,:)=0;
+    K((row-1)*N1+1,(row-1)*N1+1)=1;
+    K((row-1)*N1+N1,:)=0;
+    K((row-1)*N1+N1,(row-1)*N1+N1)=1;
+end
+
 % spy(K,'k.',50)
 % break
 %% Time integration
-T=.5;
-dt=0.001;
+T=0.01;
+dt=0.0001;
 t=0:dt:T;
 n=length(t);
 u_iterat=zeros(N1*N1,n);
@@ -150,13 +144,14 @@ end
 fprintf('Time elapsed for time integration : %6.5f',toc);
 %
 % Build u back into f for each timestep
-% plot them
+%% plot them
 for i = 1:n
     surfc(xx,yy,reshape(u_iterat(:,i),[N1 N1]));
-%     zlim([0 1])
+    zlim([0 1])
     xlabel('x');
     ylabel('y');
     zlabel('z');
     title(['t = ' num2str(dt*i)]);
-    pause(0.001)
+    pause(0.1)
+    clf
 end

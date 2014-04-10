@@ -2,7 +2,7 @@ clf
 clear
 clc
 
-N=10;
+N=15;
 N1=N+1;
 [phi, D, x, w,gamma]=GLL_Basis(N);
 
@@ -45,11 +45,16 @@ K(N1*(N1-1)+1:N1*N1,N1*(N1-1)+1:N1*N1)=eye(N1);
 
 for row=2:N
     K((row-1)*N1+1,:)=0;
+    K((row-1)*N1+1,(row-1)*N1+1)=1;
     K((row-1)*N1+N1,:)=0;
+    K((row-1)*N1+N1,(row-1)*N1+N1)=1;
 end
 
-
-f=sin(pi/2.*xx-pi/2).*sin(pi/2.*yy-pi/2);
+%% Initial Condition
+f=zeros(N1);
+u=zeros(N1*N1,1);
+% f=sin(pi/2.*xx-pi/2).*sin(pi/2.*yy-pi/2);
+f(floor(N1/2),floor(N1/2))=1;
 for i = 1:N1
     for j = 1:N1
         u((i-1)*N1+j)=f(i,j);
@@ -58,22 +63,27 @@ end
 % surf
 
 %% Time integration
-T=0.05;
-dt=0.0001;
+T=0.0183;
+dt=0.00001;
 t=0:dt:T;
 n=length(t);
 u_iterat=zeros(N1*N1,n);
 % convert from matrix to vector
 u_iterat(:,1)=u;
+fprintf('============================\n')
 fprintf('Time integration has begun\n')
+fprintf('============================\n')
+
+
 tic
 for i = 1:n
-    u_iterat(:,i+1) = (M-dt/2*K)\(M+dt/2*K)*u_iterat(:,i);
+    u_iterat(:,i+1) = (M-dt/2*K)\(M+dt/2*K)*u_iterat(:,i);      
 end
-fprintf('Time elapsed for time integration : %6.5f',toc);
+clc
+fprintf('\n\n============================\n')
+fprintf(' Time elapsed for time integration : %6.5f\n',toc);
+fprintf('============================\n')
 %
-% Build u back into f for each timestep
-% plot them
 %% Plot it.
 for i = 1:n
     surfc(xx,yy,reshape(u_iterat(:,i),[N1 N1]));
