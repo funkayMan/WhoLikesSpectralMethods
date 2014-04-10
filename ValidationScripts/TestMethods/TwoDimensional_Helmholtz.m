@@ -4,12 +4,11 @@ clc
 
 warning off all
 
-N=20;
+N=10;
 N1=N+1;
 
 [phi, D, x, w,gamma]=GLL_Basis(N);
 
-% [phi_eta, D_eta, eta, w,gamma_eta]=GLL_Basis(Ny);
 
 a=-1; b=1;
 c=-1; d=1;
@@ -20,7 +19,7 @@ J=(b-a)*(d-c)/4;
 %(i
 [xx,yy]=meshgrid(x,y);
 % f=ones(N1);
-f=0.2*sin(pi/2*(xx-1)).*sin(pi/2*(yy-1));
+f=sin(pi/2*(xx-1)).*sin(pi/2*(yy-1));
 % f=(-xx .^2+1).*(-yy.^2-1);
 % surfc(xx,yy,f)
 % pause
@@ -66,71 +65,41 @@ for m = 1:N1
 end
 % spy(K_x)
 % sum(K_x')
-% break
+% breakhttp://www.mathworks.com/help/matlab/ref/videowriter-class.html
 
 %% the eta part
 K_e=zeros(N1*N1);
 for m = 1:N1
-    for n = 1:N1       
+    for n = 1:N1
         for j = 1:N1
-            rInd=(m-1)*N1+j;
-            cInd=(n-1)*N1+j;
+            rInd=(j-1)*N1+m;
+            cInd=(n-1)*N1+m;
             tmp = D(:,j)'*(D(:,n).*w);
             K_e(rInd,cInd) = -tmp*w(m)*(2.0/(b-a))*((d-c)/2.0);
         end
     end
 end
-% spy(K_e)
-% sum(K_e')
-% break
-% subplot(2,1,1)
-%% Form the matrix, take a peek, and see if it is a solution to our system
-% sum(K_e')
+
+
 K=(K_e+K_x);
-% spy(K)
-% sum(K')
-% break
-% spy(K,30,'k')
-%% Test K
-% rhs=K*u;
-% lhs=M*d2u;
-% err=norm(rhs+lhs,2);
-% fprintf('The Error is %6.4f\n',err)
-% surfc(xx,yy,reshape
-% xlabel('x')
-% ylabel('y')
-% subplot(2,1,1)
-% plot(rhs,'bo-','LineWidth',4)
-% hold on
-% % Define an analytic derivative
-% 
-% plot(lhs,'rs-','LineWidth',2)
-% H=legend('M\K*u','Analytic Soln');
-% set(H,'Location','SouthWest');
 
-% subplot(2,1,2)
-
-
-
-% break
 %% Add boundary conditions to K
 K(1:N1,:)=0;
 K(N1*(N1-1)+1:N1*N1,:)=0;
-K(1:N1,1:N1)=eye(N1);
-K(N1*(N1-1)+1:N1*N1,N1*(N1-1)+1:N1*N1)=eye(N1);
+% K(1:N1,1:N1)=eye(N1);
+% K(N1*(N1-1)+1:N1*N1,N1*(N1-1)+1:N1*N1)=eye(N1);
 
 for row=2:N
     K((row-1)*N1+1,:)=0;
-    K((row-1)*N1+1,(row-1)*N1+1)=1;
+%         K((row-1)*N1+1,(row-1)*N1+1)=1;
     K((row-1)*N1+N1,:)=0;
-    K((row-1)*N1+N1,(row-1)*N1+N1)=1;
+%         K((row-1)*N1+N1,(row-1)*N1+N1)=1;
 end
 
-% spy(K,'k.',50)
-% break
+
 %% Time integration
-T=0.01;
-dt=0.0001;
+T=1;
+dt=0.01;
 t=0:dt:T;
 n=length(t);
 u_iterat=zeros(N1*N1,n);
@@ -145,13 +114,30 @@ fprintf('Time elapsed for time integration : %6.5f',toc);
 %
 % Build u back into f for each timestep
 %% plot them
+
+% caxis manual;          % allow subsequent plots to use the same color limits
+
+caxis([-1 1]);         % set the color axis scaling to your min and max color limits
+
+% vidObj = VideoWriter(['ElegantAdiabaticBC_0.avi'],'Motion JPEG AVI');
+% open(vidObj);
+% hfig=figure;
 for i = 1:n
-    surfc(xx,yy,reshape(u_iterat(:,i),[N1 N1]));
-    zlim([0 1])
+    
+%     clf
+    contourf(xx,yy,reshape(u_iterat(:,i),[N1 N1]),50);
+    colorbar
+    caxis([0 1])
+    shading flat
+%     set(gcf,'edgecolor','none');
     xlabel('x');
     ylabel('y');
     zlabel('z');
-    title(['t = ' num2str(dt*i)]);
+    title(['i = ' num2str(i)]);
+%     zlim([0 1])
     pause(0.1)
-    clf
+%     mov=getframe(hfig);
+%     writeVideo(vidObj,mov);
+%     %    clf
 end
+% close(vidObj);
